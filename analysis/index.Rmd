@@ -3,12 +3,10 @@ title: "Home"
 site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
-    toc: false
+    toc: true
 editor_options:
   chunk_output_type: console
 ---
-
-Welcome to my research website.
 
 # Pulizia dei dati
 
@@ -16,4 +14,4 @@ Clicca sul [link](1.0-explore-the-data.html) per vedere i passaggi della pulizia
 
 # Cambiamento delle pratica e frequenza dell'attivita' fisica 
 
-Clicca sul [link](2.0-analisis-pre-durante-attivita-fisica.html) per vedere i primi risultati.
+Clicca sul [link](2.0-analisi-pre-durante-attivita-fisica.html) per vedere i primi risultati.
