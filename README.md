@@ -1,4 +1,4 @@
-# tesi-magistrale-lucia
+# Effetto della quarantina su attivita' fisica e benessere umorale
 
 A [workflowr][] project.
 
