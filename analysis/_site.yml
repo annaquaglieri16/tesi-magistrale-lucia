@@ -5,8 +5,8 @@ navbar:
   left:
   - text: Home
     href: index.html
-  - text: About
-    href: about.html
+  - text: Grafici
+    href: 2.0-analisi-pre-durante-attivita-fisica.html
   - text: License
     href: license.html
   right:
