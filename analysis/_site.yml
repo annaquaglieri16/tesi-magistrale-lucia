@@ -1,7 +1,7 @@
-name: tesi-magistrale-lucia
+name: Effetto della quarantina su attivita' fisica e benessere umorale
 output_dir: ../docs
 navbar:
-  title: tesi-magistrale-lucia
+  title: Tesi magistrale
   left:
   - text: Home
     href: index.html
