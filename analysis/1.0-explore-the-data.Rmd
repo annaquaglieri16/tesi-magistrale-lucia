@@ -7,24 +7,67 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(tidyverse)
+library(googledrive)
+library(here)
 ```
 
-## R Markdown
+# Dati iniziali 
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r read-data}
+data <- read_csv(file.path(here(),"data/risposte-rename.csv"))
 ```
 
-## Including Plots
+## Variabili da ricodificare
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+split_semicolon <- function(vector_names){
+  return(unique(do.call(c,strsplit(vector_names,split=";"))))
+}
+
+create_csv <- function(names_vector, nome){
+  data <- data_frame(Nomi_iniziali = names_vector, Nomi_nuovi = "")
+  write_csv(data, file.path(here(),
+                            "data/dati_da_controllare",
+                            paste0(nome,".csv")))
+}
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r altro-variabili, include=FALSE}
+tipi_esercizi_pre <- tolower(split_semicolon(names(table(data$ex_pre))))
+tipi_esercizi_durante <- tolower(split_semicolon(names(table(data$ex_durante))))
+motivo_ex_pre <- tolower(split_semicolon(names(table(data$ex_pre_motivo))))
+motivo_ex_durante <- tolower(split_semicolon(names(table(data$ex_durante_motivo))))
+motivo_ex_pre_no <- tolower(unique(names(table(data$ex_pre_no_motivo))))
+motivo_ex_durante_no <- tolower(unique(names(table(data$ex_durante_no_motivo))))
+stato_prof <- tolower(split_semicolon(names(table(data$stato_prof_durante))))
+paese <- tolower(unique(names(table(data$paese_residenza))))
+tipo_abitazione <- tolower(unique(names(table(data$tipo_abitazione))))
+
+lista_nomi_da_cambiare <- list(tipi_esercizi_pre, tipi_esercizi_durante,
+                               motivo_ex_pre, motivo_ex_durante,
+                               motivo_ex_pre_no, motivo_ex_durante_no, 
+                               stato_prof, paese, tipo_abitazione)
+nomi <- c("tipi_esercizi_pre", "tipi_esercizi_durante",
+                               "motivo_ex_pre", "motivo_ex_durante",
+                               "motivo_ex_pre_no", "motivo_ex_durante_no", 
+                               "stato_prof", "paese", "tipo_abitazione")
+names(lista_nomi_da_cambiare) <- nomi
+
+
+dir.create(file.path(here(),"data/dati_da_controllare"), showWarnings = FALSE)
+sapply(1:length(lista_nomi_da_cambiare), function(x) create_csv(unique(lista_nomi_da_cambiare[[x]]), names(lista_nomi_da_cambiare[x])))
+```
+
+# Domande
+
+1. E' cambiata in generale l'attidudine a praticare attivita' sportiva? Se uno faceva attivita' prima la fa ancora o viceversa?
+  In questa analisi guardiamo il cambiamento tra Si/No prima e durante la quarantena
+  
+```{r si-no-prima-dopo}
+table(data$ex_pre_si_no, data$ex_durante_si_mp)
+```
+  
