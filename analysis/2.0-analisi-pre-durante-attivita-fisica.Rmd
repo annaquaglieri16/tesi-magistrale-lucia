@@ -18,7 +18,6 @@ library(ggalluvial)
 library(modelsummary)
 ```
 
-# Dati iniziali 
 
 ```{r read-data}
 data <- read_csv(file.path(here(),"data/risposte-rename.csv"))
