@@ -10,4 +10,10 @@ editor_options:
 
 Welcome to my research website.
 
-Click on this [link](first-analysis.html) to see my results.
+# Pulizia dei dati
+
+Clicca sul [link](1.0-explore-the-data.html) per vedere i passaggi della pulizia dei dati.
+
+# Cambiamento delle pratica e frequenza dell'attivita' fisica 
+
+Clicca sul [link](2.0-analisis-pre-durante-attivita-fisica.html) per vedere i primi risultati.
