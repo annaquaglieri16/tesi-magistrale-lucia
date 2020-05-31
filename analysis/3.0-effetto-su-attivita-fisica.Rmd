@@ -2,7 +2,9 @@
 title: "Effetto della quarantena sull'attivita' fisica"
 author: "Anna Quaglieri"
 date: "31/05/2020"
-output: html_document
+output: 
+  html_document:
+    toc: true
 ---
 
 ```{r setup, include=FALSE, echo=FALSE}
@@ -71,10 +73,12 @@ yes <- c(sum(risposte$ex_pre_si_no == "Si"), sum(risposte$ex_durante_si_mp == "S
 prop.test(yes, numero_persone)
 ```
 
-Nel complesso, la proporzione delle persone che pratica attivita' fisica diminuisce marginalmente, passando dall'`r prop.test(yes, numero_persone)$estimate[1]`% al `r prop.test(yes, numero_persone)$estimate[2]`%.
+Nel complesso, la proporzione delle persone che pratica attivita' fisica diminuisce marginalmente, passando dall'`r round(prop.test(yes, numero_persone)$estimate[1],2)`% al `r round(prop.test(yes, numero_persone)$estimate[2],2)`%.
 
 
 # 2. Motivazioni che hanno portato a un cambiamento dell'attitudine a praticare attivita' fisica.
+
+## Persone che hanno smesso di praticare: motivazioni
 
 ```{r motivazioni-si-no}
 cambio_si_no <- risposte %>%
@@ -84,49 +88,111 @@ cambio_si_no <- risposte %>%
   arrange(N.Risposte) %>%
   mutate(ex_durante_no_motivo = fct_reorder(ex_durante_no_motivo, N.Risposte))
 
-ggplot(cambio_si_no, aes(x = ex_durante_no_motivo, y = N.Risposte)) +
-  geom_bar(stat = "identity") +
-  coord_flip() +
-  theme_bw()
+knitr::kable(cambio_si_no)
 ```
 
 
+```{r demographics-si-no}
+cambio_si_no <- risposte %>%
+  filter(ex_pre_si_no == "Si" & ex_durante_si_mp == "No") 
 
-# Cambiamento nella frequenza dell'attivita' fisica
+prop.table(table(risposte$ex_pre_dove))
+prop.table(table(risposte$ex_pre_frequenza))
+#prop.table(table(risposte$stato_prof_durante))
+```
+
+- Che differenze ci sono tra le persone che hanno smesso di fare attivita' rispetto a quelle che hanno continuato?
+- Quali erano le motivazioni a praticare attivita' di queste persone rispetto a quelli che non hanno smesso di praticare? (Eta'?)
+
+## Persone che hanno iniziato a praticare: motivazioni
+
+**Motivazioni per non praticare prima della quarantena**
+
+```{r pre-motivazioni-no-si}
+cambio_no_si_pre <- risposte %>%
+  filter(ex_pre_si_no == "No" & ex_durante_si_mp == "Si") %>%
+  mutate(ex_pre_no_motivo = ifelse(!(ex_pre_no_motivo %in% c("Mancanza di voglia", "Mancanza di tempo")), "Altro", ex_pre_no_motivo)) %>%
+  group_by(ex_pre_no_motivo) %>%
+  summarise(N.Risposte = n()) %>%
+  arrange(N.Risposte) %>%
+  mutate(ex_pre_no_motivo = fct_reorder(ex_pre_no_motivo, N.Risposte)) 
+
+
+knitr::kable(cambio_no_si_pre)
+```
+
+**Motivazioni per praticare durante la quarantena**
+
+```{r durante-motivazioni-no-si}
+cambio_no_si <- risposte %>%
+  filter(ex_pre_si_no == "No" & ex_durante_si_mp == "Si") %>%
+  group_by(ex_durante_motivo) %>%
+  summarise(N.Risposte = n()) %>%
+  arrange(N.Risposte) %>%
+  mutate(ex_durante_motivo = fct_reorder(ex_durante_motivo, N.Risposte))
+knitr::kable(cambio_no_si)
+```
+
+
+# 3. Qual e' stato l'effetto della quarantena sulla frequenza della pratica di attivita' fisica?
+
 
 ```{r all-plot-frequenza}
+risposte <- risposte %>%
+  mutate(ex_pre_frequenza = ifelse(is.na(ex_pre_frequenza), "Non praticante", ex_pre_frequenza),
+         ex_durante_frequenza = ifelse(is.na(ex_durante_frequenza), "Non praticante", ex_durante_frequenza))
 tab <- data.frame(table(risposte$ex_pre_frequenza, risposte$ex_durante_frequenza)) %>%
   dplyr::rename(Prima = Var1,
                 Durante = Var2) %>%
   mutate(Prima = factor(Prima, levels = c("Tutti i giorni", "Almeno 3 volte a settimana",
-                                          "1 o 2 volte a settimana","Meno di una volta a settimana"), 
-                        labels = c("Ogni giorno","Almeno 3", "1 o 2", "Meno di una")),
+                                          "1 o 2 volte a settimana","Meno di una volta a settimana","Non praticante"), 
+                        labels = c("Ogni giorno","Almeno 3", "1 o 2", "Meno di una", "Non\npraticante")),
          Durante = factor(Durante, levels = c("Tutti i giorni", "Almeno 3 volte a settimana",
-                                          "1 o 2 volte a settimana","Meno di una volta a settimana"), 
-                        labels = c("Ogni giorno","Almeno 3", "1 o 2", "Meno di una")))
+                                          "1 o 2 volte a settimana","Meno di una volta a settimana","Non praticante"), 
+                        labels = c("Ogni giorno","Almeno 3", "1 o 2", "Meno di una", "Non\npraticante")))
 
 ggplot(as.data.frame(tab),
        aes(y = Freq, axis1 = `Prima`, axis2 = `Durante`)) +
   geom_alluvium(aes(fill=`Prima`)) +
   geom_stratum(width = 2/12,) +
   geom_text(stat = "stratum", infer.label = TRUE) +
-  scale_x_discrete(limits = c("Prima", "Durante"), expand = c(0.03, .03)) +
+  scale_x_discrete(limits = c("Prima", "Durante"), expand = c(0.03, .03), position = "top") +
   scale_fill_brewer(type = "qual", palette = "Set1")+
   theme_minimal()+
-  labs(y = "Numero persone", fill = "Risposta prima della quarantena") +
-  ggtitle("Cambiamento nella frequenza dell'attivita' fisica praticata")+
-  theme(legend.position = "bottom")
+  labs(y = "Numero persone", fill = "Risposta prima della quarantena\n(Relativa alla frequenza per settimana)") +
+  theme(legend.position = "bottom",
+        axis.text.x = element_text(face="bold", color="black", 
+                           size=16, angle=0),
+       legend.title = element_text(size=13,face="bold"),
+       legend.text = element_text(size=13))+
+  guides(fill=guide_legend(nrow=2,byrow=TRUE))
 ```
 
 
 ```{r barplot-frequenza}
 tab_long <- risposte %>%
-  gather(key = Periodo, value = Frequenza, ex_pre_frequenza,ex_durante_frequenza) 
+  gather(key = Periodo, value = Frequenza, ex_pre_frequenza,ex_durante_frequenza)  %>%
+  mutate(Periodo = ifelse(Periodo == "ex_durante_frequenza", "Durante", "Prima"))
 
 ggplot(tab_long, aes(x = Frequenza, fill = Periodo)) +
   geom_bar(position = "dodge", colour="white") +
+  labs(x = "Frequenza per settimana", y = "Numero di persone")+
   theme_bw() + coord_flip()
 ```
 
 
+# 5. Quelli che hanno praticato attivita' durante la quarantena, percepiscono un miglioramento nella loro forma fisica?
+
+```{r miglioramento}
+risposte <- read_csv(file.path(here(),"data/risposte-rename.csv"))
+risposte <- risposte %>%
+  mutate(forma_fisica_migliorata = ifelse(is.na(forma_fisica_migliorata), "Non praticante", as.character(forma_fisica_migliorata))) %>%
+  mutate(forma_fisica_migliorata = factor(forma_fisica_migliorata, 
+                                          levels = c("Non praticante", "Per niente", "Ho notato un lieve miglioramento", "Molto")))
+
+ggplot(risposte, aes(x = ex_pre_si_no, fill = forma_fisica_migliorata)) +
+  geom_bar(position = "dodge", colour="white")+
+  theme_bw()+
+  labs(x = "Praticavi attivita' fisica\nprima della quarantena?", y = "Numero di persone")
+```
 
