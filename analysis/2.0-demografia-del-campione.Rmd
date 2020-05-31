@@ -131,3 +131,15 @@ ggplot() +
   
 ```
 
+
+## Pratica e tipo di attivita' fisica prima della quarantena
+
+La maggior parte dei partecipanti praticava un qualche tipo di attivita' fisica prima della quarantena. 
+
+```{r}
+table(risposte$ex_pre_si_no)
+```
+
+**Tipo di attivita' praticata prima della quarantena**
+
+- Aspetto per i dati ricodificati che sta facendo la Lucia
