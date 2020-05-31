@@ -391,7 +391,7 @@ div.tocify {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -400,7 +400,7 @@ div.tocify {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -412,7 +412,7 @@ div.tocify {
 <strong>Last updated:</strong> 2020-05-31
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>tesi-magistrale-lucia/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -428,12 +428,12 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
 </div>
 </div>
 </div>
@@ -500,16 +500,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomannaquaglieri16tesimagistraleluciatreefe7bd4c8fd896b4d5c20f68c8f349fdef8e82bebtargetblankfe7bd4ca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/tree/fe7bd4c8fd896b4d5c20f68c8f349fdef8e82beb" target="_blank">fe7bd4c</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomannaquaglieri16tesimagistraleluciatreeb606d3c35806c73b9608bdcadffac7f70869a640targetblankb606d3ca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/tree/b606d3c35806c73b9608bdcadffac7f70869a640" target="_blank">b606d3c</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomannaquaglieri16tesimagistraleluciatreefe7bd4c8fd896b4d5c20f68c8f349fdef8e82bebtargetblankfe7bd4ca" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomannaquaglieri16tesimagistraleluciatreeb606d3c35806c73b9608bdcadffac7f70869a640targetblankb606d3ca" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/tree/fe7bd4c8fd896b4d5c20f68c8f349fdef8e82beb" target="_blank">fe7bd4c</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/tree/b606d3c35806c73b9608bdcadffac7f70869a640" target="_blank">b606d3c</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -522,7 +522,6 @@ Ignored files:
     Ignored:    data/dati_da_controllare/
 
 Unstaged changes:
-    Modified:   analysis/3.0-effetto-su-attivita-fisica.Rmd
     Modified:   analysis/index.Rmd
 
 </code></pre>
@@ -562,6 +561,57 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/blob/b606d3c35806c73b9608bdcadffac7f70869a640/analysis/3.0-effetto-su-attivita-fisica.Rmd" target="_blank">b606d3c</a>
+</td>
+<td>
+Anna Quaglieri
+</td>
+<td>
+2020-05-31
+</td>
+<td>
+wflow_publish(“analysis/3.0-effetto-su-attivita-fisica.Rmd”,
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/blob/1056d41494c748426c4d6153dd0bb0fbe3b2b41e/analysis/3.0-effetto-su-attivita-fisica.Rmd" target="_blank">1056d41</a>
+</td>
+<td>
+Anna Quaglieri
+</td>
+<td>
+2020-05-31
+</td>
+<td>
+add question 1
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/annaquaglieri16/tesi-magistrale-lucia/1056d41494c748426c4d6153dd0bb0fbe3b2b41e/docs/3.0-effetto-su-attivita-fisica.html" target="_blank">1056d41</a>
+</td>
+<td>
+Anna Quaglieri
+</td>
+<td>
+2020-05-31
+</td>
+<td>
+add question 1
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -657,6 +707,43 @@ aggiunge demografia del campione
 <div id="qual-e-stato-leffetto-della-quarantena-sullattitudine-a-praticare-attivita-fisica" class="section level1">
 <h1>1. Qual e’ stato l’effetto della quarantena sull’attitudine a praticare attivita’ fisica?</h1>
 <p><img src="figure/3.0-effetto-su-attivita-fisica.Rmd/plot-si-no-pratica-prima-dopo-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plot-si-no-pratica-prima-dopo-1">
+Past versions of plot-si-no-pratica-prima-dopo-1.png
+</button>
+</p>
+<div id="fig-plot-si-no-pratica-prima-dopo-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/blob/1056d41494c748426c4d6153dd0bb0fbe3b2b41e/docs/figure/3.0-effetto-su-attivita-fisica.Rmd/plot-si-no-pratica-prima-dopo-1.png" target="_blank">1056d41</a>
+</td>
+<td>
+Anna Quaglieri
+</td>
+<td>
+2020-05-31
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <table>
 <thead>
 <tr class="header">
@@ -724,14 +811,227 @@ alternative hypothesis: two.sided
 sample estimates:
    prop 1    prop 2 
 0.8643703 0.8266954 </code></pre>
-<p>Nel complesso, la proporzione delle persone che pratica attivita’ fisica diminuisce marginalmente, passando dall’0.8643703% al 0.8266954%.</p>
+<p>Nel complesso, la proporzione delle persone che pratica attivita’ fisica diminuisce marginalmente, passando dall’0.86% al 0.83%.</p>
 </div>
 <div id="motivazioni-che-hanno-portato-a-un-cambiamento-dellattitudine-a-praticare-attivita-fisica." class="section level1">
 <h1>2. Motivazioni che hanno portato a un cambiamento dell’attitudine a praticare attivita’ fisica.</h1>
-<p><img src="figure/3.0-effetto-su-attivita-fisica.Rmd/motivazioni-si-no-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div id="persone-che-hanno-smesso-di-praticare-motivazioni" class="section level2">
+<h2>Persone che hanno smesso di praticare: motivazioni</h2>
+<table>
+<thead>
+<tr class="header">
+<th align="left">ex_durante_no_motivo</th>
+<th align="right">N.Risposte</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Evitavo di uscire</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Fino al 3 Maggio non ho praticato sport …perché era viatetato dal decreto,e in casa non ho attrezzature che mi consentano attività fisica!</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Ho deciso di dedicare tutto il tempo a conseguire la laurea in luglio</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Impossibile usare la bike</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Lokdown</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Non ci si puo’ allontanare piu’ di tanti da casa, non mi piace circumnavigare sempre lo stesso palazzo</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Non si piteva uscire di casa</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Non si poteva fare nulla di ciò che mi piace fare</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Non si poteva uscirr</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Perche era praticamente proibito</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Poco spazio in casa</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Preferisco le attività di squadra e comunque camminare da sola senza meta mi annoia</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Problemi muscolari</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Spazio insufficiente per correre</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Mancanza di tempo</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Mancanza di strutture</td>
+<td align="right">26</td>
+</tr>
+<tr class="odd">
+<td align="left">Mancanza di voglia</td>
+<td align="right">65</td>
+</tr>
+</tbody>
+</table>
+<pre><code>
+ Al chiuso All&#39;aperto 
+  0.494396   0.505604 </code></pre>
+<pre><code>
+      1 o 2 volte a settimana    Almeno 3 volte a settimana 
+                   0.26525529                    0.53300125 
+Meno di una volta a settimana                Tutti i giorni 
+                   0.01369863                    0.18804483 </code></pre>
+<ul>
+<li>Che differenze ci sono tra le persone che hanno smesso di fare attivita’ rispetto a quelle che hanno continuato?</li>
+<li>Quali erano le motivazioni a praticare attivita’ di queste persone rispetto a quelli che non hanno smesso di praticare? (Eta’?)</li>
+</ul>
 </div>
-<div id="cambiamento-nella-frequenza-dellattivita-fisica" class="section level1">
-<h1>Cambiamento nella frequenza dell’attivita’ fisica</h1>
+<div id="persone-che-hanno-iniziato-a-praticare-motivazioni" class="section level2">
+<h2>Persone che hanno iniziato a praticare: motivazioni</h2>
+<p><strong>Motivazioni per non praticare prima della quarantena</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">ex_pre_no_motivo</th>
+<th align="right">N.Risposte</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Altro</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Mancanza di voglia</td>
+<td align="right">32</td>
+</tr>
+<tr class="odd">
+<td align="left">Mancanza di tempo</td>
+<td align="right">38</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Motivazioni per praticare durante la quarantena</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">ex_durante_motivo</th>
+<th align="right">N.Risposte</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Avevo bisogno di respirare aria pulita</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Compagnia con la moglie. Digestione.</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Fa parte del mio lavoro;Mi piace, lo faccio per passione;Voglio perdere peso</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Fa parte del mio lavoro;Mi piace, lo faccio per passione;Voglio rimanere in forma e in salute</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">ho piu tempo e voglio approfittare per sciogliere muscolatura irrigidita</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Passare il tempo e tenermi in forma</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Per in investire il tempo a disposizione in qualcosa che fa bene a corpo e mente</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Per occupare il tempo</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Voglio perdere peso;Trovare della figa</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Voglio perdere peso;Voglio rimanere in forma e in salute;Aiuta anche mentalmente</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Voglio perdere peso;Voglio rimanere in forma e in salute;Benessere psicofisico</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Voglio perdere peso;Voglio rimanere in forma e in salute;Ho provato piacere e ora la faccio tutti i giorni</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Voglio perdere peso;Voglio rimanere in forma e in salute;Per guarigione caviglis</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Voglio rimanere in forma e in salute;Per allenare i miei atleti</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Voglio rimanere in forma e in salute;Per passare il tempo</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Mi piace, lo faccio per passione</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Mi piace, lo faccio per passione;Voglio perdere peso;Voglio rimanere in forma e in salute</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">Mi piace, lo faccio per passione;Voglio rimanere in forma e in salute</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Voglio perdere peso;Voglio rimanere in forma e in salute</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Voglio perdere peso</td>
+<td align="right">12</td>
+</tr>
+<tr class="odd">
+<td align="left">Voglio rimanere in forma e in salute</td>
+<td align="right">33</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="qual-e-stato-leffetto-della-quarantena-sulla-frequenza-della-pratica-di-attivita-fisica" class="section level1">
+<h1>3. Qual e’ stato l’effetto della quarantena sulla frequenza della pratica di attivita’ fisica?</h1>
 <p><img src="figure/3.0-effetto-su-attivita-fisica.Rmd/all-plot-frequenza-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-all-plot-frequenza-1">
@@ -808,6 +1108,10 @@ Anna Quaglieri
 </table>
 </div>
 </div>
+</div>
+<div id="quelli-che-hanno-praticato-attivita-durante-la-quarantena-percepiscono-un-miglioramento-nella-loro-forma-fisica" class="section level1">
+<h1>5. Quelli che hanno praticato attivita’ durante la quarantena, percepiscono un miglioramento nella loro forma fisica?</h1>
+<p><img src="figure/3.0-effetto-su-attivita-fisica.Rmd/miglioramento-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
