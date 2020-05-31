@@ -13,24 +13,19 @@ library(googledrive)
 library(here)
 library(ggalluvial)
 library(modelsummary)
-
-# Per le mappe
-library(ggmap)
-library(maps)
-library(mapproj)
-library(viridis)
+library(gridExtra)
+library(epitools)
 ```
 
 
 ```{r read-data}
-data <- read_csv(file.path(here(),"data/risposte-rename.csv"))
+risposte <- read_csv(file.path(here(),"data/risposte-rename.csv"))
 ```
 
+# 1. Qual e' stato l'effetto della quarantena sull'attitudine a praticare attivita' fisica?
 
-# Prima/Durante quarantena attivita' fisica
-
-```{r}
-tab <- data.frame(table(data$ex_pre_si_no, data$ex_durante_si_mp)) %>%
+```{r plot-si-no-pratica-prima-dopo}
+tab <- data.frame(table(risposte$ex_pre_si_no, risposte$ex_durante_si_mp)) %>%
   dplyr::rename(`Prima` = Var1,
                 `Durante` = Var2)
 
@@ -38,19 +33,69 @@ ggplot(as.data.frame(tab),
        aes(y = Freq, axis1 = `Prima`, axis2 = `Durante`)) +
   geom_alluvium(aes(fill=`Prima`)) +
   geom_stratum(width = 4/12) +
-  geom_text(stat = "stratum", infer.label = TRUE) +
-  scale_x_discrete(limits = c("Prima", "Durante")) +
+  geom_text(stat = "stratum", infer.label = TRUE, size=4) +
+  scale_x_discrete(limits = c("Prima", "Durante"), position = "top") +
   scale_fill_brewer(type = "qual", palette = "Set1")+
   theme_minimal()+
-  labs(y = "Numero persone", fill = "Risposta prima della quarantena") +
-  ggtitle("Effetto della quarantena su attivita' fisica")
+  labs(y = "Numero persone", fill = "Praticavi attivita fisica'\nprima della quarantena?") +
+ theme(axis.text.x = element_text(face="bold", color="black", 
+                           size=16, angle=0),
+       legend.title = element_text(size=15,face="bold"),
+       legend.text = element_text(size=13))
 ```
+
+```{r table-si-no-pratica-prima-dopo}
+knitr::kable(tab)
+```
+
+```{r association-test-rr}
+risposte <- risposte %>%
+  mutate(ex_pre_si_no = factor(ex_pre_si_no, levels = c("Si", "No")), 
+         ex_pre_si_no_dic = as.numeric(factor(ex_pre_si_no, 
+                                              levels = c("Si", "No")))-1,
+         ex_durante_si_no_dic = as.numeric(factor(ex_durante_si_mp, 
+                                                  levels = c("Si", "No")))-1) %>%
+  mutate(change = factor(abs(ex_durante_si_no_dic-ex_pre_si_no_dic), 
+                         levels = c(0,1), labels = c("No change", "Change")))
+
+# Success=1 should be in the right column which in our case is "No" excericse before quarantine
+riskratio(table(risposte$change, risposte$ex_pre_si_no))
+```
+
+**Le persone che hanno dichiarato di non fare attivita' fisica prima della quarantena hanno una probabilita' 5 volte piu' grande di cambiare attitudine rispetto a chi gia' faceva attivita' prima della quarantena**
+
+
+```{r prop-test-prima-dopo-pratica}
+numero_persone <- c(929, 929)
+yes <- c(sum(risposte$ex_pre_si_no == "Si"), sum(risposte$ex_durante_si_mp == "Si"))
+prop.test(yes, numero_persone)
+```
+
+Nel complesso, la proporzione delle persone che pratica attivita' fisica diminuisce marginalmente, passando dall'`r prop.test(yes, numero_persone)$estimate[1]`% al `r prop.test(yes, numero_persone)$estimate[2]`%.
+
+
+# 2. Motivazioni che hanno portato a un cambiamento dell'attitudine a praticare attivita' fisica.
+
+```{r motivazioni-si-no}
+cambio_si_no <- risposte %>%
+  filter(ex_pre_si_no == "Si" & ex_durante_si_mp == "No") %>%
+  group_by(ex_durante_no_motivo) %>%
+  summarise(N.Risposte = n()) %>%
+  arrange(N.Risposte) %>%
+  mutate(ex_durante_no_motivo = fct_reorder(ex_durante_no_motivo, N.Risposte))
+
+ggplot(cambio_si_no, aes(x = ex_durante_no_motivo, y = N.Risposte)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  theme_bw()
+```
+
 
 
 # Cambiamento nella frequenza dell'attivita' fisica
 
 ```{r all-plot-frequenza}
-tab <- data.frame(table(data$ex_pre_frequenza, data$ex_durante_frequenza)) %>%
+tab <- data.frame(table(risposte$ex_pre_frequenza, risposte$ex_durante_frequenza)) %>%
   dplyr::rename(Prima = Var1,
                 Durante = Var2) %>%
   mutate(Prima = factor(Prima, levels = c("Tutti i giorni", "Almeno 3 volte a settimana",
@@ -75,7 +120,7 @@ ggplot(as.data.frame(tab),
 
 
 ```{r barplot-frequenza}
-tab_long <- data %>%
+tab_long <- risposte %>%
   gather(key = Periodo, value = Frequenza, ex_pre_frequenza,ex_durante_frequenza) 
 
 ggplot(tab_long, aes(x = Frequenza, fill = Periodo)) +

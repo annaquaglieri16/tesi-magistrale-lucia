@@ -20,19 +20,21 @@ Descrizione del campione che siamo riusciti a raggiungere:
   - Eta', geografia
   - Se praticavano, che tipo di sport praticavano?
 
-## Effetto della quarantena sull'attivita' fisica
+## [Effetto della quarantena sull'attivita' fisica](3.0-effetto-su-attivita-fisica.html)
 
 1. Qual e' stato l'effetto della quarantena sull'attitudine a praticare attivita' fisica?
 
   - Mostra come e' cambiata la disposizione a paticare attivita' fisica prima e dopo la quarante. Ad esempio, quanti di quelli che praticavano prima praticano anche durante o hanno smesso e viceversa. 
 
-2. Qual e' stato l'effetto della quarantena sulla frequenza della pratica di attivita' fisica?
+2. Quali sono le motivazioni principali che hanno determinato un cambiamento nell'attitudine a praticare attivita' fisica?
+  - Analizza le motivazioni di quelli che da non praticare prima della quarantena hanno iniziato a praticare e viceversa.
+  
+
+3. Qual e' stato l'effetto della quarantena sulla frequenza della pratica di attivita' fisica?
 
   - Mostra come e' cambiata la frequenza nella pratica dell'attivita' fisica prima e dopo la quarante. Ad esempio, quanti di quelli che praticavano prima solo una volta  settimana durante la quarantena hanno aumentato o diminuito etc.. 
 
-3. Quali sono le motivazioni principali che hanno determinato un cambiamento nella pratica?
-  - Analizza le motivazioni di quelli che da non praticare prima della quarantena hanno iniziato a praticare e viceversa.
-  
+
 4. Per quelli che praticavano anche prima della quarantena, come si sono adattati alla situazione?
   - Usano ancora un personal trainer?
   - Come e' cambiato il metodo di allenamento (da fuori al chiuso o online?)
