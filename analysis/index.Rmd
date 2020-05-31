@@ -8,10 +8,48 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Pulizia dei dati
+# Domande principali della ricerca
 
-Clicca sul [link](1.0-explore-the-data.html) per vedere i passaggi della pulizia dei dati.
+- Se la quarantena ha avuto un aspetto positivo/negativo/neutro sulla pratica di attivita' fisica e sulla forma fisica
+- Che impatto ha avuto la quarantena sull'umore delle persone e se questo puo' essere associato alla pratica di attivita' fisica
 
-# Cambiamento delle pratica e frequenza dell'attivita' fisica 
+## [Demografia del campione](2.0-demografia-del-campione.html)
 
-Clicca sul [link](2.0-analisi-pre-durante-attivita-fisica.html) per vedere i primi risultati.
+Descrizione del campione che siamo riusciti a raggiungere:
+
+  - Eta', geografia
+  - Se praticavano, che tipo di sport praticavano?
+
+## Effetto della quarantena sull'attivita' fisica
+
+1. Qual e' stato l'effetto della quarantena sull'attitudine a praticare attivita' fisica?
+
+  - Mostra come e' cambiata la disposizione a paticare attivita' fisica prima e dopo la quarante. Ad esempio, quanti di quelli che praticavano prima praticano anche durante o hanno smesso e viceversa. 
+
+2. Qual e' stato l'effetto della quarantena sulla frequenza della pratica di attivita' fisica?
+
+  - Mostra come e' cambiata la frequenza nella pratica dell'attivita' fisica prima e dopo la quarante. Ad esempio, quanti di quelli che praticavano prima solo una volta  settimana durante la quarantena hanno aumentato o diminuito etc.. 
+
+3. Quali sono le motivazioni principali che hanno determinato un cambiamento nella pratica?
+  - Analizza le motivazioni di quelli che da non praticare prima della quarantena hanno iniziato a praticare e viceversa.
+  
+4. Per quelli che praticavano anche prima della quarantena, come si sono adattati alla situazione?
+  - Usano ancora un personal trainer?
+  - Come e' cambiato il metodo di allenamento (da fuori al chiuso o online?)
+  
+
+5. Quelli che hanno praticato attivita' durante la quarantena, percepiscono un miglioramento nella ,oro forma fisica?
+
+6. Analizza diversi fattori quantitativi che possono aver contributo al cambiamento nella pratica dell'attivita' fisica:
+  - Se prima praticavano o no
+  - L'eta'
+  - In che tipo di casa/paese abitano 
+  - lavoro che praticano
+  - Provincia/regione di provenienza (plotta prima e dopo rispetto alle regioni)
+  
+## Aspetto umorale
+
+- Modelli univariati per vedere il cambiamento nella percezione tra prima e dopo di ogni sensazione
+- Modelli includendo altri aspetti come se prima praticavano attivita' sportiva e in che modo e se e' cambiato lo stato professionale
+
+

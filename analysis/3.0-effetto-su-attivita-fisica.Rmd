@@ -1,12 +1,9 @@
 ---
-title: "Cambiamento prima e dopo rigaurdo all'attivita' fisica"
+title: "Effetto della quarantena sull'attivita' fisica"
 author: "Anna Quaglieri"
-date: "30/05/2020"
-output: 
-  html_document:
-    toc: true
+date: "31/05/2020"
+output: html_document
 ---
-
 
 ```{r setup, include=FALSE, echo=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
@@ -16,12 +13,19 @@ library(googledrive)
 library(here)
 library(ggalluvial)
 library(modelsummary)
+
+# Per le mappe
+library(ggmap)
+library(maps)
+library(mapproj)
+library(viridis)
 ```
 
 
 ```{r read-data}
 data <- read_csv(file.path(here(),"data/risposte-rename.csv"))
 ```
+
 
 # Prima/Durante quarantena attivita' fisica
 
@@ -40,11 +44,6 @@ ggplot(as.data.frame(tab),
   theme_minimal()+
   labs(y = "Numero persone", fill = "Risposta prima della quarantena") +
   ggtitle("Effetto della quarantena su attivita' fisica")
-```
-
-
-```{r}
-knitr::kable(tab)
 ```
 
 
@@ -84,15 +83,5 @@ ggplot(tab_long, aes(x = Frequenza, fill = Periodo)) +
   theme_bw() + coord_flip()
 ```
 
-
-```{r}
-knitr::kable(tab)
-```
-
-
-
-```{r}
-
-```
 
 

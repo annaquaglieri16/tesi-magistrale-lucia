@@ -394,7 +394,7 @@ div.tocify {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -403,7 +403,7 @@ div.tocify {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -412,10 +412,10 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-05-30
+<strong>Last updated:</strong> 2020-05-31
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>tesi-magistrale-lucia/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -431,12 +431,12 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
 </div>
 </div>
 </div>
@@ -503,16 +503,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomannaquaglieri16tesimagistraleluciatree39c07a00934b19965f502c27391a67c5fa10edb7targetblank39c07a0a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/tree/39c07a00934b19965f502c27391a67c5fa10edb7" target="_blank">39c07a0</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomannaquaglieri16tesimagistraleluciatreef884f45cfe734403171978dd2cb664b4d9f87224targetblankf884f45a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/tree/f884f45cfe734403171978dd2cb664b4d9f87224" target="_blank">f884f45</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomannaquaglieri16tesimagistraleluciatree39c07a00934b19965f502c27391a67c5fa10edb7targetblank39c07a0a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomannaquaglieri16tesimagistraleluciatreef884f45cfe734403171978dd2cb664b4d9f87224targetblankf884f45a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/tree/39c07a00934b19965f502c27391a67c5fa10edb7" target="_blank">39c07a0</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/tree/f884f45cfe734403171978dd2cb664b4d9f87224" target="_blank">f884f45</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -523,6 +523,9 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    data/dati_da_controllare/
+
+Unstaged changes:
+    Modified:   analysis/2.0-analisi-pre-durante-attivita-fisica.Rmd
 
 </code></pre>
 <p>
@@ -561,6 +564,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/annaquaglieri16/tesi-magistrale-lucia/f884f45cfe734403171978dd2cb664b4d9f87224/docs/2.0-analisi-pre-durante-attivita-fisica.html" target="_blank">f884f45</a>
+</td>
+<td>
+Anna Quaglieri
+</td>
+<td>
+2020-05-30
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -687,46 +707,81 @@ primi grafici
 </div>
 </div>
 </div>
+<div id="domande-principali-della-ricerca" class="section level1">
+<h1>Domande principali della ricerca</h1>
+<ul>
+<li>se la quarantena ha avuto un aspetto positivo/negativo/neutro sulla pratica di attivita’ fisica e sulla forma fisica</li>
+<li>che impatto ha avuto la quarantena sull’umore delle persone e se questo puo’ essere associato alla pratica di attivita’ fisica</li>
+</ul>
+<div id="aspetti-demografici" class="section level2">
+<h2>Aspetti demografici</h2>
+<p>Descrizione del campione che siamo riusciti a raggiungere: - Eta’, geografia - Se praticavano, che tipo di sport praticavano?</p>
+</div>
+<div id="attivita-fisica" class="section level2">
+<h2>Attivita’ fisica</h2>
+<ol style="list-style-type: decimal">
+<li>Qual e’ stato l’effetto della quarantena sull’attitudine a praticare attivita’ fisica?</li>
+</ol>
+<ul>
+<li>Mostra come e’ cambiata la disposizione a paticare attivita’ fisica prima e dopo la quarante. Ad esempio, quanti di quelli che praticavano prima praticano anche durante o hanno smesso e viceversa.</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>Qual e’ stato l’effetto della quarantena sulla frequenza della pratica di attivita’ fisica?</li>
+</ol>
+<ul>
+<li>Mostra come e’ cambiata la frequenza nella pratica dell’attivita’ fisica prima e dopo la quarante. Ad esempio, quanti di quelli che praticavano prima solo una volta settimana durante la quarantena hanno aumentato o diminuito etc..</li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>Quali sono le motivazioni principali che hanno determinato un cambiamento nella pratica?</li>
+</ol>
+<ul>
+<li>Analizza le motivazioni di quelli che da non praticare prima della quarantena hanno iniziato a praticare e viceversa.</li>
+</ul>
+<ol start="4" style="list-style-type: decimal">
+<li>Per quelli che praticavano anche prima della quarantena, come si sono adattati alla situazione?</li>
+</ol>
+<ul>
+<li>Usano ancora un personal trainer?</li>
+<li>Come e’ cambiato il metodo di allenamento (da fuori al chiuso o online?)</li>
+</ul>
+<ol start="5" style="list-style-type: decimal">
+<li><p>Quelli che hanno praticato attivita’ durante la quarantena, percepiscono un miglioramento nella ,oro forma fisica?</p></li>
+<li><p>Analizza diversi fattori quantitativi che possono aver contributo al cambiamento nella pratica dell’attivita’ fisica:</p></li>
+</ol>
+<ul>
+<li>Se prima praticavano o no</li>
+<li>L’eta’</li>
+<li>In che tipo di casa/paese abitano</li>
+<li>lavoro che praticano</li>
+</ul>
+</div>
+<div id="aspetto-umorale" class="section level2">
+<h2>Aspetto umorale</h2>
+<ul>
+<li>Modelli univariati per vedere il cambiamento nella percezione tra prima e dopo di ogni sensazione</li>
+<li>Modelli includendo altri aspetti come se prima praticavano attivita’ sportiva e in che modo e se e’ cambiato lo stato professionale</li>
+</ul>
+</div>
+</div>
+<div id="demografia-del-campione" class="section level1">
+<h1>Demografia del campione</h1>
+<p><img src="figure/2.0-analisi-pre-durante-attivita-fisica.Rmd/demo-campione-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>
+Dai 18 ai 35 anni Dai 36 ai 55 anni   Oltre i 55 anni 
+              625               211                93 </code></pre>
+<p><strong>Percentuale dei partecipanti per classi di eta’</strong></p>
+<pre><code>
+Dai 18 ai 35 anni Dai 36 ai 55 anni   Oltre i 55 anni 
+        0.6727664         0.2271259         0.1001076 </code></pre>
+<p><strong>Percentuale di quelli che praticavano o no prima della quarantena per classi di eta’</strong></p>
+<pre><code>    
+     Dai 18 ai 35 anni Dai 36 ai 55 anni Oltre i 55 anni
+  No         0.1168000         0.1563981       0.2150538
+  Si         0.8832000         0.8436019       0.7849462</code></pre>
+</div>
 <div id="primadurante-quarantena-attivita-fisica" class="section level1">
 <h1>Prima/Durante quarantena attivita’ fisica</h1>
-<p><img src="figure/2.0-analisi-pre-durante-attivita-fisica.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-1">
-Past versions of unnamed-chunk-1-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-1-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/blob/fb999eaf07083392ed6f5d759fbf402168977492/docs/figure/2.0-analisi-pre-durante-attivita-fisica.Rmd/unnamed-chunk-1-1.png" target="_blank">fb999ea</a>
-</td>
-<td>
-Anna Quaglieri
-</td>
-<td>
-2020-05-30
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/2.0-analisi-pre-durante-attivita-fisica.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
 <table>
 <thead>
 <tr class="header">
@@ -953,7 +1008,7 @@ other attached packages:
  [1] modelsummary_0.3.0 ggalluvial_0.11.3  here_0.1           googledrive_1.0.1 
  [5] forcats_0.5.0      stringr_1.4.0      dplyr_1.0.0        purrr_0.3.4       
  [9] tidyr_1.1.0        tibble_3.0.1       ggplot2_3.3.1      tidyverse_1.3.0   
-[13] readr_1.3.1        workflowr_1.6.2   
+[13] readr_1.3.1       
 
 loaded via a namespace (and not attached):
  [1] Rcpp_1.0.4.6       lubridate_1.7.8    lattice_0.20-41    assertthat_0.2.1  
@@ -963,15 +1018,15 @@ loaded via a namespace (and not attached):
 [17] rstudioapi_0.11    whisker_0.4        blob_1.2.1         rmarkdown_2.1     
 [21] labeling_0.3       munsell_0.5.0      broom_0.5.6        compiler_4.0.0    
 [25] httpuv_1.5.3.1     modelr_0.1.8       xfun_0.14          pkgconfig_2.0.3   
-[29] htmltools_0.4.0    tidyselect_1.1.0   fansi_0.4.1        crayon_1.3.4      
-[33] dbplyr_1.4.4       withr_2.2.0        later_1.0.0        grid_4.0.0        
-[37] nlme_3.1-147       jsonlite_1.6.1     gtable_0.3.0       lifecycle_0.2.0   
-[41] DBI_1.1.0          git2r_0.27.1       magrittr_1.5       scales_1.1.1      
-[45] cli_2.0.2          stringi_1.4.6      farver_2.0.3       fs_1.4.1          
-[49] promises_1.1.0     xml2_1.3.2         ellipsis_0.3.1     generics_0.0.2    
-[53] vctrs_0.3.0        RColorBrewer_1.1-2 tools_4.0.0        glue_1.4.1        
-[57] hms_0.5.3          yaml_2.2.1         colorspace_1.4-1   rvest_0.3.5       
-[61] knitr_1.28         haven_2.3.0       </code></pre>
+[29] htmltools_0.4.0    tidyselect_1.1.0   workflowr_1.6.2    fansi_0.4.1       
+[33] crayon_1.3.4       dbplyr_1.4.4       withr_2.2.0        later_1.0.0       
+[37] grid_4.0.0         nlme_3.1-147       jsonlite_1.6.1     gtable_0.3.0      
+[41] lifecycle_0.2.0    DBI_1.1.0          git2r_0.27.1       magrittr_1.5      
+[45] scales_1.1.1       cli_2.0.2          stringi_1.4.6      farver_2.0.3      
+[49] fs_1.4.1           promises_1.1.0     xml2_1.3.2         ellipsis_0.3.1    
+[53] generics_0.0.2     vctrs_0.3.0        RColorBrewer_1.1-2 tools_4.0.0       
+[57] glue_1.4.1         hms_0.5.3          yaml_2.2.1         colorspace_1.4-1  
+[61] rvest_0.3.5        knitr_1.28         haven_2.3.0       </code></pre>
 </div>
 </div>
 
