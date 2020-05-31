@@ -1,0 +1,133 @@
+---
+title: "Cambiamento prima e dopo rigaurdo all'attivita' fisica"
+author: "Anna Quaglieri"
+date: "30/05/2020"
+output: 
+  html_document:
+    toc: true
+---
+
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(readr)
+library(tidyverse)
+library(googledrive)
+library(here)
+library(ggalluvial)
+library(modelsummary)
+
+# Per le mappe
+library(ggmap)
+library(maps)
+library(mapproj)
+library(viridis)
+```
+
+
+```{r read-data}
+risposte <- read_csv(file.path(here(),"data/risposte-rename.csv"))
+```
+
+Totale delle risposte `r nrow(risposte)` .
+
+# Demografia del campione
+
+## Eta' / pratica prima della quarantena
+
+```{r demo-campione}
+tab_eta <- t(table(risposte$eta, risposte$ex_pre_si_no))
+ggdf <- data.frame(`Età` = rep(colnames(tab_eta),each=2),
+   N.Risposte = as.numeric(tab_eta),
+   ex_pre_si_no = rep(rownames(tab_eta),times=3))
+
+
+ggplot(ggdf,aes(x=`Età`,y=N.Risposte,fill=ex_pre_si_no)) + 
+  geom_bar(position="dodge",colour="white",stat="identity")  + 
+  scale_y_continuous() + 
+  theme_bw() + 
+  labs(x="Classi di eta'", y = "Numero di partecipanti", fill="Praticavi attivita fisica'\nprima della quarantena?")+
+  geom_text(aes(label = N.Risposte), hjust=0.5, vjust=-0.25, size = 2.5,position=position_dodge(width=0.9)) 
+```
+
+
+```{r}
+table(risposte$eta)
+```
+
+**Percentuale dei partecipanti per classi di eta'**
+
+```{r}
+prop.table(table(risposte$eta))
+```
+
+**Percentuale di quelli che praticavano o no prima della quarantena per classi di eta'**
+
+```{r}
+prop.table(table(risposte$ex_pre_si_no, risposte$eta), margin = 2)
+```
+
+## Sesso / eta'
+
+```{r demo-campione-sesso}
+tab_eta <- t(table(risposte$eta, risposte$Sesso))
+ggdf <- data.frame(`Età` = rep(colnames(tab_eta),each=2),
+   N.Risposte = as.numeric(tab_eta),
+   Sesso = rep(rownames(tab_eta),times=3))
+
+
+ggplot(ggdf,aes(x=`Età`,y=N.Risposte,fill=Sesso)) + 
+  geom_bar(position="dodge",colour="white",stat="identity")  + 
+  scale_y_continuous() + 
+  theme_bw() + 
+  labs(x="Classi di eta'", y = "Numero di partecipanti", fill="Sesso dichiarato")+
+  geom_text(aes(label = N.Risposte), hjust=0.5, vjust=-0.25, size = 2.5,position=position_dodge(width=0.9)) 
+```
+
+```{r}
+prop.table(table(risposte$Sesso, risposte$eta), margin = 2)
+```
+
+
+## Provenienza
+
+```{r load-maps}
+# Get the world polygon and extract UK
+italy <- map_data("world") %>% 
+  filter(region=="Italy")
+
+cities <- world.cities %>% 
+  filter(country.etc=="Italy") %>%
+  dplyr::rename(paese_residenza=name)
+```
+
+
+```{r merge-cities-with-lat-long}
+risposte_by_city <- risposte %>%
+  left_join(cities) %>%
+  group_by(paese_residenza, lat, long) %>%
+  summarise(numero_risposte =n())
+
+mybreaks <- round(seq(
+  min(risposte_by_city$numero_risposte),
+  max(risposte_by_city$numero_risposte), length.out = 5))
+
+ggplot() +
+  geom_polygon(data = italy, aes(x= long, y = lat, group = group), fill="grey", alpha=0.3) +
+  geom_point(data=risposte_by_city, aes(x= long, y= lat, 
+            size = numero_risposte, colour=numero_risposte), 
+            shape=20, stroke=FALSE) +
+  scale_size_continuous(name="Numero risposte", range=c(1,12), breaks = mybreaks) +
+  scale_color_viridis(name="Numero risposte" , breaks=mybreaks) +
+  theme_void() + coord_map() + 
+  guides( colour = guide_legend()) +
+  ggtitle("Risposte per regione") +
+  theme(
+      text = element_text(color = "#22211d"),
+      plot.background = element_rect(fill = "white", color = NA), 
+      panel.background = element_rect(fill = "white", color = NA), 
+      legend.background = element_rect(fill = "white", color = NA),
+      plot.title = element_text(size= 16, hjust=0.1, color = "#4e4d47"))
+  
+```
+
