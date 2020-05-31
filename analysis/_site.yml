@@ -5,6 +5,8 @@ navbar:
   left:
   - text: Home
     href: index.html
+  - text: Home1
+    href: index.html
   - text: License
     href: license.html
   right:
