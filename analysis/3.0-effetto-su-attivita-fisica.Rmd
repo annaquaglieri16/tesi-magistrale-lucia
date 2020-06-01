@@ -53,6 +53,7 @@ knitr::kable(tab)
 ```{r association-test-rr}
 risposte <- risposte %>%
   mutate(ex_pre_si_no = factor(ex_pre_si_no, levels = c("Si", "No")), 
+         ex_durante_si_mp = factor(ex_durante_si_mp, levels = c("Si", "No")), 
          ex_pre_si_no_dic = as.numeric(factor(ex_pre_si_no, 
                                               levels = c("Si", "No")))-1,
          ex_durante_si_no_dic = as.numeric(factor(ex_durante_si_mp, 
@@ -61,10 +62,20 @@ risposte <- risposte %>%
                          levels = c(0,1), labels = c("No change", "Change")))
 
 # Success=1 should be in the right column which in our case is "No" excericse before quarantine
-riskratio(table(risposte$change, risposte$ex_pre_si_no))
+riskratio(table(risposte$ex_pre_si_no, risposte$change))
 ```
 
-**Le persone che hanno dichiarato di non fare attivita' fisica prima della quarantena hanno una probabilita' 5 volte piu' grande di cambiare attitudine rispetto a chi gia' faceva attivita' prima della quarantena**
+## Come interpretare i risultati sopra 
+
+- **Le persone che hanno dichiarato di non fare attivita' fisica prima della quarantena hanno una probabilita' 4 volte piu' grande di cambiare attitudine rispetto a chi gia' faceva attivita' prima della quarantena**
+
+
+- Nella stima di questo rischio non stiamo tenendo in conto di nessun altro fattore delle persone che hanno risposto al questionario (eta, abitazione, sesso etc..)
+
+- Il rapport (Risk Ratio) si ottiene facendo il rapporto tra la probabilita' di cambiare tra chi ha detto **No** prima e chi ha detto **Si** prima: 
+
+$$Risk\;Ratio_{No\;vs\;Si\;prima}=\frac{\frac{75}{126}}{\frac{110}{803}}=4.34$$
+$$Risk\;Ratio_{Si\;vs\;No\;prima}=\frac{1}{Risk\;Ratio_{No\;vs\;Si\;prima}}=0.23$$
 
 
 ```{r prop-test-prima-dopo-pratica}
