@@ -121,7 +121,7 @@ table(risposte$comune[!(risposte$comune %in% cities$paese_residenza)])
 
 - Tutte le risposte che non hanno un paese di residenza specificato e' perche' hanno specificato Italia e sono `r length(risposte$paese_residenza[is.na(risposte$comune)])` risposte.
 
-```{r merge-cities-with-lat-long}
+```{r merge-cities-with-lat-long, include=TRUE}
 risposte_by_city <- risposte %>%
   left_join(cities, by = c("comune" = "paese_residenza")) %>%
   group_by(comune, lat, long) %>%
@@ -155,7 +155,7 @@ ggplot() +
 
 ## Eta' / pratica prima della quarantena
 
-```{r demo-campione}
+```{r demo-campione, include=TRUE}
 tab_eta <- t(table(risposte$eta, risposte$ex_pre_si_no))
 ggdf <- data.frame(`Età` = rep(colnames(tab_eta),each=2),
    N.Risposte = as.numeric(tab_eta),
@@ -171,25 +171,25 @@ ggplot(ggdf,aes(x=`Età`,y=N.Risposte,fill=ex_pre_si_no)) +
 ```
 
 
-```{r}
+```{r include=TRUE}
 table(risposte$eta)
 ```
 
 **Percentuale dei partecipanti per classi di eta'**
 
-```{r}
+```{r include=TRUE}
 prop.table(table(risposte$eta))
 ```
 
 **Percentuale di quelli che praticavano o no prima della quarantena per classi di eta'**
 
-```{r}
+```{r include=TRUE}
 prop.table(table(risposte$ex_pre_si_no, risposte$eta), margin = 2)
 ```
 
 ## Sesso / eta'
 
-```{r demo-campione-sesso}
+```{r demo-campione-sesso, include=TRUE}
 tab_eta <- t(table(risposte$eta, risposte$Sesso))
 ggdf <- data.frame(`Età` = rep(colnames(tab_eta),each=2),
    N.Risposte = as.numeric(tab_eta),
@@ -204,7 +204,7 @@ ggplot(ggdf,aes(x=`Età`,y=N.Risposte,fill=Sesso)) +
   geom_text(aes(label = N.Risposte), hjust=0.5, vjust=-0.25, size = 2.5,position=position_dodge(width=0.9)) 
 ```
 
-```{r}
+```{r, include=TRUE}
 prop.table(table(risposte$Sesso, risposte$eta), margin = 2)
 ```
 
@@ -213,7 +213,7 @@ prop.table(table(risposte$Sesso, risposte$eta), margin = 2)
 
 La maggior parte dei partecipanti praticava un qualche tipo di attivita' fisica prima della quarantena. 
 
-```{r}
+```{r include=TRUE}
 table(risposte$ex_pre_si_no)
 ```
 
@@ -261,7 +261,7 @@ risposte_att_pre_rec$count_activity <- apply(risposte_att_pre_rec[,c("ex1","ex2"
 ```
 
 
-```{r plot_activity_type}
+```{r plot_activity_type, include=TRUE}
 risposte_att_pre_rec %>%
   mutate(count_activity = as.character(count_activity)) %>%
   filter(ex_pre_si_no != "No") %>%
@@ -271,7 +271,7 @@ ggplot(aes(x = count_activity)) +
   labs(x="Numero di attivita' praticate per partecipante", y = "Frequenza")
 ```
 
-```{r}
+```{r include=TRUE}
 perce = risposte_att_pre_rec %>%
   mutate(count_activity = as.character(count_activity)) %>%
   filter(ex_pre_si_no != "No") %>%
@@ -281,7 +281,7 @@ perce = risposte_att_pre_rec %>%
 knitr::kable(perce, caption = "Distribuzione del numero di attivita' praticate da ciascun partecipante prima della quarantena, tra i partecipanti che hanno dichiarato di praticare attivita' fisica.")
 ```
 
-```{r tipo-attivita}
+```{r tipo-attivita, include=TRUE}
 tutte_attivita <- c(risposte_att_pre_rec$ex1, risposte_att_pre_rec$ex2, risposte_att_pre_rec$ex3, risposte_att_pre_rec$ex4, risposte_att_pre_rec$ex5)
 tutte_attivita <- tutte_attivita[!is.na(tutte_attivita)]
 table_activity_pre <- data.frame(tutte_attivita) %>%
