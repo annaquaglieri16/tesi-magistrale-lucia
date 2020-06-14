@@ -16,12 +16,18 @@ library(googledrive)
 library(here)
 library(ggalluvial)
 library(modelsummary)
+library(readxl)
 
 # Per le mappe
 library(ggmap)
 library(maps)
 library(mapproj)
 library(viridis)
+library(ggrepel)
+
+split_semicolon <- function(vector_names){
+  return(unique(do.call(c,strsplit(vector_names,split=";"))))
+}
 ```
 
 
@@ -32,6 +38,120 @@ risposte <- read_csv(file.path(here(),"data/risposte-rename.csv"))
 Totale delle risposte `r nrow(risposte)` .
 
 # Demografia del campione
+
+## Filtri
+
+Teniamo solo risposte di persone che hanno passato la quarantena in Italia. 
+
+## Provenienza geografica
+
+```{r}
+paese_provenienza <- read_excel(file.path(here(),"data/dati_da_controllare_cambiati/paese.xlsx")) %>%
+  dplyr::select(Nomi_iniziali, Nomi_nuovi, comune, regione)
+table(paese_provenienza$regione,useNA="always")
+```
+
+- Regioni da rimuovere: "Germania", "Inghilterra", "Francia","Londra", "Svizzera", "USA", "Regno Unito", "Ungheria".
+
+```{r}
+regione_da_rimuovere <- c("Germania", "Inghilterra","Inghiliterra","Francia", "Londra", "Svizzera", "USA", "Regno Unito", "Ungheria")
+```
+
+```{r parse_towns}
+risposte$paese_residenza <- tolower(risposte$paese_residenza)
+sum(!(risposte$paese_residenza %in% paese_provenienza$Nomi_iniziali))
+sum(!(risposte$Nomi_iniziali %in% paese_provenienza$paese_residenza))
+dim(risposte)
+risposte <- risposte %>%
+  left_join(paese_provenienza, by = c("paese_residenza" = "Nomi_iniziali"))
+dim(risposte)
+
+# Filter foreign countries
+risposte <- risposte %>%
+  filter(!(regione %in% regione_da_rimuovere))
+
+risposte <- risposte %>%
+  dplyr::select(-paese_residenza) %>%
+  dplyr::rename(paese_residenza = Nomi_nuovi) %>%
+  mutate(regione = tolower(regione),
+         comune = tolower(comune),
+         paese_residenza = tolower(paese_residenza)) 
+dim(risposte)
+```
+
+- Regioni nello studio
+
+```{r regioni-finali, include=TRUE}
+sort(table(risposte$regione))
+```
+
+## Provenienza
+
+```{r load-maps}
+# Get the world polygon and extract UK
+italy <- map_data("world") %>% 
+  filter(region=="Italy")
+
+cities <- world.cities %>% 
+  filter(country.etc=="Italy") %>%
+  dplyr::rename(paese_residenza=name) %>%
+  mutate(paese_residenza=tolower(paese_residenza))
+
+# Regioni
+province <- map_data("italy")
+```
+
+
+```{r missing-cities}
+table(risposte$comune[!(risposte$comune %in% cities$paese_residenza)])
+cities$paese_residenza[cities$paese_residenza %in% "florence"] <- "firenze"
+risposte$comune[risposte$comune %in% "forlì-cesena"] <- "forli"
+cities$paese_residenza[cities$paese_residenza %in% "milan"] <- "milano"
+risposte$comune[risposte$comune %in% "monza e brianza"] <- "monza"
+risposte$comune[risposte$comune %in% "perdenone"] <- "pordenone"
+risposte$comune[risposte$comune %in% c("reggio-emilia","reggio emilia")] <- "reggio nell'emilia"
+risposte$comune[risposte$comune %in% "provincia del sud sardegna"] <- "cagliari"
+cities$paese_residenza[cities$paese_residenza %in% "syracuse"] <- "siracusa"
+cities$paese_residenza[cities$paese_residenza %in% "turin"] <- "torino"
+cities$paese_residenza[cities$paese_residenza %in% "venice"] <- "venezia"
+cities$paese_residenza[cities$paese_residenza %in% "rome"] <- "roma"
+risposte$comune[risposte$comune %in% "reggio calabria"] <- "reggio di calabria"
+table(risposte$comune[!(risposte$comune %in% cities$paese_residenza)])
+```
+
+- Tutte le risposte che non hanno un paese di residenza specificato e' perche' hanno specificato Italia e sono `r length(risposte$paese_residenza[is.na(risposte$comune)])` risposte.
+
+```{r merge-cities-with-lat-long}
+risposte_by_city <- risposte %>%
+  left_join(cities, by = c("comune" = "paese_residenza")) %>%
+  group_by(comune, lat, long) %>%
+  summarise(numero_risposte =n())
+
+mybreaks <- round(seq(
+  min(risposte_by_city$numero_risposte),
+  max(risposte_by_city$numero_risposte), length.out = 5))
+
+ggplot() +
+  geom_polygon(data = italy, aes(x= long, y = lat, group = group), fill="grey", alpha=0.3) +
+  geom_point(data=risposte_by_city, aes(x= long, y= lat, 
+            size = numero_risposte, colour=numero_risposte), 
+            shape=20, stroke=FALSE) +
+  scale_size_continuous(name="Numero risposte", range=c(1,12), breaks = mybreaks) +
+  scale_color_viridis(name="Numero risposte" , breaks=mybreaks) +
+  theme_void() + coord_map() + 
+  geom_text_repel(data=risposte_by_city %>% arrange(numero_risposte) %>% tail(20), 
+                  aes(x=long, y=lat, label=toupper(comune)), size=2,
+                  segment.size = 0.2)+
+  guides( colour = guide_legend()) +
+  ggtitle("Risposte per provincia") +
+  theme(
+      text = element_text(color = "#22211d"),
+      plot.background = element_rect(fill = "white", color = NA), 
+      panel.background = element_rect(fill = "white", color = NA), 
+      legend.background = element_rect(fill = "white", color = NA),
+      plot.title = element_text(size= 16, hjust=0.1, color = "#4e4d47"))
+```
+
 
 ## Eta' / pratica prima della quarantena
 
@@ -89,49 +209,6 @@ prop.table(table(risposte$Sesso, risposte$eta), margin = 2)
 ```
 
 
-## Provenienza
-
-```{r load-maps}
-# Get the world polygon and extract UK
-italy <- map_data("world") %>% 
-  filter(region=="Italy")
-
-cities <- world.cities %>% 
-  filter(country.etc=="Italy") %>%
-  dplyr::rename(paese_residenza=name)
-```
-
-
-```{r merge-cities-with-lat-long}
-risposte_by_city <- risposte %>%
-  left_join(cities) %>%
-  group_by(paese_residenza, lat, long) %>%
-  summarise(numero_risposte =n())
-
-mybreaks <- round(seq(
-  min(risposte_by_city$numero_risposte),
-  max(risposte_by_city$numero_risposte), length.out = 5))
-
-ggplot() +
-  geom_polygon(data = italy, aes(x= long, y = lat, group = group), fill="grey", alpha=0.3) +
-  geom_point(data=risposte_by_city, aes(x= long, y= lat, 
-            size = numero_risposte, colour=numero_risposte), 
-            shape=20, stroke=FALSE) +
-  scale_size_continuous(name="Numero risposte", range=c(1,12), breaks = mybreaks) +
-  scale_color_viridis(name="Numero risposte" , breaks=mybreaks) +
-  theme_void() + coord_map() + 
-  guides( colour = guide_legend()) +
-  ggtitle("Risposte per regione") +
-  theme(
-      text = element_text(color = "#22211d"),
-      plot.background = element_rect(fill = "white", color = NA), 
-      panel.background = element_rect(fill = "white", color = NA), 
-      legend.background = element_rect(fill = "white", color = NA),
-      plot.title = element_text(size= 16, hjust=0.1, color = "#4e4d47"))
-  
-```
-
-
 ## Pratica e tipo di attivita' fisica prima della quarantena
 
 La maggior parte dei partecipanti praticava un qualche tipo di attivita' fisica prima della quarantena. 
@@ -142,4 +219,76 @@ table(risposte$ex_pre_si_no)
 
 **Tipo di attivita' praticata prima della quarantena**
 
-- Aspetto per i dati ricodificati che sta facendo la Lucia
+```{r tipo-attivita-pre}
+att_pre <- read_excel(file.path(here(),"data/dati_da_controllare_cambiati/tipi_esercizi_pre.xlsx")) %>%
+  dplyr::select(Nomi_iniziali, `NOMI NUOVI`)
+risposte_att_pre <- risposte %>% 
+  dplyr::select(ex_pre,ex_pre_si_no) %>%
+  separate(ex_pre, into = c("ex1", "ex2", "ex3", "ex4", "ex5"), sep=";") %>%
+  mutate_at(.vars = c("ex1","ex2","ex3", "ex4", "ex5"), .funs = tolower)
+
+sum(!(risposte_att_pre$ex1[!is.na(risposte_att_pre$ex1)] %in% att_pre$Nomi_iniziali))
+sum(!(risposte_att_pre$ex2[!is.na(risposte_att_pre$ex2)] %in% att_pre$Nomi_iniziali))
+sum(!(risposte_att_pre$ex3[!is.na(risposte_att_pre$ex3)] %in% att_pre$Nomi_iniziali))
+sum(!(risposte_att_pre$ex4[!is.na(risposte_att_pre$ex4)] %in% att_pre$Nomi_iniziali))
+sum(!(risposte_att_pre$ex5[!is.na(risposte_att_pre$ex5)] %in% att_pre$Nomi_iniziali))
+```
+
+
+```{r merge-nomi-nuovi}
+risposte_att_pre_rec <- risposte_att_pre %>%
+  left_join(att_pre, by = c("ex1" = "Nomi_iniziali")) %>%
+  mutate(ex1 = `NOMI NUOVI`) %>%
+  dplyr::select(-`NOMI NUOVI`) %>%
+  
+  left_join(att_pre, by = c("ex2" = "Nomi_iniziali")) %>%
+  mutate(ex2 = `NOMI NUOVI`) %>%
+  dplyr::select(-`NOMI NUOVI`) %>%
+  
+  left_join(att_pre, by = c("ex3" = "Nomi_iniziali")) %>%
+  mutate(ex3 = `NOMI NUOVI`) %>%
+  dplyr::select(-`NOMI NUOVI`) %>%
+  
+  left_join(att_pre, by = c("ex4" = "Nomi_iniziali")) %>%
+  mutate(ex4 = `NOMI NUOVI`) %>%
+  dplyr::select(-`NOMI NUOVI`) %>%
+  
+  left_join(att_pre, by = c("ex5" = "Nomi_iniziali")) %>%
+  mutate(ex5 = `NOMI NUOVI`) %>%
+  dplyr::select(-`NOMI NUOVI`)
+
+risposte_att_pre_rec$count_activity <- apply(risposte_att_pre_rec[,c("ex1","ex2","ex3","ex4","ex5")], 1, function(x) sum(!is.na(x)))
+```
+
+
+```{r plot_activity_type}
+risposte_att_pre_rec %>%
+  mutate(count_activity = as.character(count_activity)) %>%
+  filter(ex_pre_si_no != "No") %>%
+ggplot(aes(x = count_activity)) +
+  geom_bar() +
+  theme_bw() +
+  labs(x="Numero di attivita' praticate per partecipante", y = "Frequenza")
+```
+
+```{r}
+perce = risposte_att_pre_rec %>%
+  mutate(count_activity = as.character(count_activity)) %>%
+  filter(ex_pre_si_no != "No") %>%
+  group_by(count_activity) %>%
+  summarise(n_dei_si = n(),
+    percentuale_dei_si = n()/sum(risposte_att_pre_rec$ex_pre_si_no == "Si"))
+knitr::kable(perce, caption = "Distribuzione del numero di attivita' praticate da ciascun partecipante prima della quarantena, tra i partecipanti che hanno dichiarato di praticare attivita' fisica.")
+```
+
+```{r tipo-attivita}
+tutte_attivita <- c(risposte_att_pre_rec$ex1, risposte_att_pre_rec$ex2, risposte_att_pre_rec$ex3, risposte_att_pre_rec$ex4, risposte_att_pre_rec$ex5)
+tutte_attivita <- tutte_attivita[!is.na(tutte_attivita)]
+table_activity_pre <- data.frame(tutte_attivita) %>%
+  group_by(tutte_attivita) %>%
+  summarise(totale = n(),
+            percentuale = n()/sum(risposte_att_pre_rec$ex_pre_si_no == "Si")) %>%
+  arrange(percentuale)
+knitr::kable(table_activity_pre, caption = "Distribuzione dei tipi di attivita' fisica praticate prima della quarantena.")
+```
+
