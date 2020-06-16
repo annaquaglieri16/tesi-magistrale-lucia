@@ -85,8 +85,6 @@ dim(risposte)
 sort(table(risposte$regione))
 ```
 
-## Provenienza
-
 ```{r load-maps}
 # Get the world polygon and extract UK
 italy <- map_data("world") %>% 
@@ -121,7 +119,7 @@ table(risposte$comune[!(risposte$comune %in% cities$paese_residenza)])
 
 - Tutte le risposte che non hanno un paese di residenza specificato e' perche' hanno specificato Italia e sono `r length(risposte$paese_residenza[is.na(risposte$comune)])` risposte.
 
-```{r merge-cities-with-lat-long, include=TRUE}
+```{r merge-cities-with-lat-long, include=TRUE, fig.cap="Solo i nomi dei 20 paesi con il maggior numero di risposte sonoevidenziati nel grafico."}
 risposte_by_city <- risposte %>%
   left_join(cities, by = c("comune" = "paese_residenza")) %>%
   group_by(comune, lat, long) %>%
@@ -151,6 +149,7 @@ ggplot() +
       legend.background = element_rect(fill = "white", color = NA),
       plot.title = element_text(size= 16, hjust=0.1, color = "#4e4d47"))
 ```
+
 
 
 ## Eta' / pratica prima della quarantena
