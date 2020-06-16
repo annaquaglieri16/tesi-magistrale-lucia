@@ -21,7 +21,7 @@ library(epitools)
 
 
 ```{r read-data}
-risposte <- read_csv(file.path(here(),"data/risposte-rename.csv"))
+risposte <- read_csv(file.path(here(),"data/risposte-con-regioni.csv"))
 ```
 
 # 1. Qual e' stato l'effetto della quarantena sull'attitudine a praticare attivita' fisica?

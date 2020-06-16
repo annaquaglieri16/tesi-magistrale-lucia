@@ -301,3 +301,10 @@ table_activity_pre <- data.frame(tutte_attivita) %>%
 knitr::kable(table_activity_pre, caption = "Distribuzione dei tipi di attivita' fisica praticate prima della quarantena.")
 ```
 
+
+# Salva dati 
+
+```{r}
+write_csv(risposte, file.path(here(), "data/risposte-con-regioni.csv"))
+```
+
