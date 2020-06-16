@@ -1,5 +1,5 @@
 ---
-title: "Cambiamento prima e dopo rigaurdo all'attivita' fisica"
+title: "Demografia del campione"
 author: "Anna Quaglieri"
 date: "30/05/2020"
 output: 
@@ -37,9 +37,8 @@ risposte <- read_csv(file.path(here(),"data/risposte-rename.csv"))
 
 Totale delle risposte `r nrow(risposte)` .
 
-# Demografia del campione
 
-## Filtri
+# Filtri
 
 Teniamo solo risposte di persone che hanno passato la quarantena in Italia. 
 
