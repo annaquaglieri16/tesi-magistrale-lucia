@@ -409,7 +409,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-06-02
+<strong>Last updated:</strong> 2020-06-16
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -500,16 +500,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomannaquaglieri16tesimagistraleluciatree6c546f8b36393356c89d8bbe465440a8cde63515targetblank6c546f8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/tree/6c546f8b36393356c89d8bbe465440a8cde63515" target="_blank">6c546f8</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomannaquaglieri16tesimagistraleluciatreee91132fc3c053c851fb119984a7d7905412a1cf8targetblanke91132fa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/tree/e91132fc3c053c851fb119984a7d7905412a1cf8" target="_blank">e91132f</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomannaquaglieri16tesimagistraleluciatree6c546f8b36393356c89d8bbe465440a8cde63515targetblank6c546f8a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomannaquaglieri16tesimagistraleluciatreee91132fc3c053c851fb119984a7d7905412a1cf8targetblanke91132fa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/tree/6c546f8b36393356c89d8bbe465440a8cde63515" target="_blank">6c546f8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/tree/e91132fc3c053c851fb119984a7d7905412a1cf8" target="_blank">e91132f</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -520,6 +520,7 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    data/dati_da_controllare/
+    Ignored:    data/dati_da_controllare_cambiati/
 
 </code></pre>
 <p>
@@ -558,6 +559,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/blob/e91132fc3c053c851fb119984a7d7905412a1cf8/analysis/3.0-effetto-su-attivita-fisica.Rmd" target="_blank">e91132f</a>
+</td>
+<td>
+Anna Quaglieri
+</td>
+<td>
+2020-06-16
+</td>
+<td>
+wflow_publish(c(“analysis/2.0-demografia-del-campione.Rmd”, “analysis/3.0-effetto-su-attivita-fisica.Rmd”))
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/annaquaglieri16/tesi-magistrale-lucia/58d9cf2c5d5170229bae27a075bc818f3a1b9cb6/docs/3.0-effetto-su-attivita-fisica.html" target="_blank">58d9cf2</a>
+</td>
+<td>
+Anna Quaglieri
+</td>
+<td>
+2020-06-02
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -792,38 +827,38 @@ Anna Quaglieri
 <tr class="even">
 <td align="left">Si</td>
 <td align="left">No</td>
-<td align="right">110</td>
+<td align="right">109</td>
 </tr>
 <tr class="odd">
 <td align="left">No</td>
 <td align="left">Si</td>
-<td align="right">75</td>
+<td align="right">73</td>
 </tr>
 <tr class="even">
 <td align="left">Si</td>
 <td align="left">Si</td>
-<td align="right">693</td>
+<td align="right">686</td>
 </tr>
 </tbody>
 </table>
 <pre><code>$data
        
         No change Change Total
-  Si          693    110   803
-  No           51     75   126
-  Total       744    185   929
+  Si          686    109   795
+  No           51     73   124
+  Total       737    182   919
 
 $measure
     risk ratio with 95% C.I.
      estimate    lower    upper
-  Si 1.000000       NA       NA
-  No 4.345238 3.467856 5.444602
+  Si   1.0000       NA       NA
+  No   4.2938 3.417874 5.394206
 
 $p.value
     two-sided
      midp.exact fisher.exact   chi.square
   Si         NA           NA           NA
-  No          0  6.77159e-27 4.792854e-33
+  No          0 7.011616e-26 8.282568e-32
 
 $correction
 [1] FALSE
@@ -842,14 +877,14 @@ attr(,&quot;method&quot;)
     2-sample test for equality of proportions with continuity correction
 
 data:  yes out of numero_persone
-X-squared = 4.7637, df = 1, p-value = 0.02907
+X-squared = 4.8179, df = 1, p-value = 0.02817
 alternative hypothesis: two.sided
 95 percent confidence interval:
- 0.003777797 0.071572042
+ 0.004079869 0.073422822
 sample estimates:
    prop 1    prop 2 
-0.8643703 0.8266954 </code></pre>
-<p>Nel complesso, la proporzione delle persone che pratica attivita’ fisica diminuisce marginalmente, passando dall’0.86% al 0.83%.</p>
+0.8557589 0.8170075 </code></pre>
+<p>Nel complesso, la proporzione delle persone che pratica attivita’ fisica diminuisce marginalmente, passando dall’0.86% al 0.82%.</p>
 </div>
 </div>
 <div id="motivazioni-che-hanno-portato-a-un-cambiamento-dellattitudine-a-praticare-attivita-fisica." class="section level1">
@@ -930,18 +965,18 @@ sample estimates:
 </tr>
 <tr class="odd">
 <td align="left">Mancanza di voglia</td>
-<td align="right">65</td>
+<td align="right">64</td>
 </tr>
 </tbody>
 </table>
 <pre><code>
  Al chiuso All&#39;aperto 
-  0.494396   0.505604 </code></pre>
+ 0.4955975  0.5044025 </code></pre>
 <pre><code>
       1 o 2 volte a settimana    Almeno 3 volte a settimana 
-                   0.26525529                    0.53300125 
+                   0.26540881                    0.53333333 
 Meno di una volta a settimana                Tutti i giorni 
-                   0.01369863                    0.18804483 </code></pre>
+                   0.01383648                    0.18742138 </code></pre>
 <ul>
 <li>Che differenze ci sono tra le persone che hanno smesso di fare attivita’ rispetto a quelle che hanno continuato?</li>
 <li>Quali erano le motivazioni a praticare attivita’ di queste persone rispetto a quelli che non hanno smesso di praticare? (Eta’?)</li>
@@ -964,11 +999,11 @@ Meno di una volta a settimana                Tutti i giorni
 </tr>
 <tr class="even">
 <td align="left">Mancanza di voglia</td>
-<td align="right">32</td>
+<td align="right">31</td>
 </tr>
 <tr class="odd">
 <td align="left">Mancanza di tempo</td>
-<td align="right">38</td>
+<td align="right">37</td>
 </tr>
 </tbody>
 </table>
@@ -1055,11 +1090,11 @@ Meno di una volta a settimana                Tutti i giorni
 </tr>
 <tr class="odd">
 <td align="left">Voglio perdere peso;Voglio rimanere in forma e in salute</td>
-<td align="right">5</td>
+<td align="right">4</td>
 </tr>
 <tr class="even">
 <td align="left">Voglio perdere peso</td>
-<td align="right">12</td>
+<td align="right">11</td>
 </tr>
 <tr class="odd">
 <td align="left">Voglio rimanere in forma e in salute</td>
