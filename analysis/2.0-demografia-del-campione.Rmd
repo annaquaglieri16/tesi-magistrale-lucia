@@ -150,6 +150,17 @@ ggplot() +
 ```
 
 
+## Risposte per regione
+
+```{r}
+risposte %>%
+  group_by(regione) %>%
+  summarise(`Numero risposte` = n()) %>%
+  arrange(`Numero risposte`) %>%
+  mutate(regione = fct_reorder(regione, `Numero risposte`)) %>%
+ggplot(aes(x = regione, y = `Numero risposte`)) + geom_bar(stat="identity") + theme_bw() + coord_flip()
+```
+
 
 ## Eta' / pratica prima della quarantena
 
