@@ -152,7 +152,7 @@ ggplot() +
 
 ## Risposte per regione
 
-```{r}
+```{r include=TRUE}
 risposte %>%
   group_by(regione) %>%
   summarise(`Numero risposte` = n()) %>%
