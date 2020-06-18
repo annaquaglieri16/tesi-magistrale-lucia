@@ -248,8 +248,8 @@ tot_no <- sum(risposte$ex_pre_si_no == "No")
 miglioramento_per_gruppo <- risposte %>% 
   group_by(forma_fisica_migliorata, ex_pre_si_no) %>%
   summarise(N.partecipanti = n()) %>%
-  mutate(N.partecipanti = case_when(ex_pre_si_no == "Si" ~ N.partecipanti/tot_si,
-                                    ex_pre_si_no == "No" ~ N.partecipanti/tot_no))
+  mutate(N.partecipanti = case_when(ex_pre_si_no == "Si" ~ N.partecipanti/tot_si * 100,
+                                    ex_pre_si_no == "No" ~ N.partecipanti/tot_no *100))
 
 ggplot(miglioramento_per_gruppo, aes(x = forma_fisica_migliorata, y = N.partecipanti, colour = ex_pre_si_no)) +
   geom_point(size=4) + theme_bw() + 
