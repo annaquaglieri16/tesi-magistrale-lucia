@@ -72,9 +72,9 @@ riskratio(table(risposte$ex_pre_si_no, risposte$change))
 
 - Nella stima di questo rischio non stiamo tenendo in conto di nessun altro fattore delle persone che hanno risposto al questionario (eta, abitazione, sesso etc..)
 
-- Il rapport (Risk Ratio) si ottiene facendo il rapporto tra la probabilita' di cambiare tra chi ha detto **No** prima e chi ha detto **Si** prima: 
+- Il rapporto (Risk Ratio) si ottiene facendo il rapporto tra la probabilita' di cambiare tra chi ha detto **No** prima e chi ha detto **Si** prima: 
 
-$$Risk\;Ratio_{No\;vs\;Si\;prima}=\frac{\frac{75}{126}}{\frac{110}{803}}=4.34$$
+$$Risk\;Ratio_{No\;vs\;Si\;prima}=\frac{\frac{73}{124}}{\frac{109}{795}}=4.29$$
 $$Risk\;Ratio_{Si\;vs\;No\;prima}=\frac{1}{Risk\;Ratio_{No\;vs\;Si\;prima}}=0.23$$
 
 
