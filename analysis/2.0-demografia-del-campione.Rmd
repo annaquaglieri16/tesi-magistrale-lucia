@@ -116,7 +116,7 @@ risposte$comune[risposte$comune %in% "reggio calabria"] <- "reggio di calabria"
 table(risposte$comune[!(risposte$comune %in% cities$paese_residenza)])
 ```
 
-- Tutte le risposte che non hanno un paese di residenza specificato e' perche' hanno specificato Italia e sono `r length(risposte$paese_residenza[is.na(risposte$comune)])` risposte.
+- Tutte le risposte che non hanno un paese di residenza specificato e' perche' hanno specificato Italia e sono `r length(risposte$paese_residenza[risposte$paese_residenza == "(italia)"])` risposte.
 
 ```{r merge-cities-with-lat-long, include=TRUE, fig.cap="Solo i nomi dei 20 paesi con il maggior numero di risposte sonoevidenziati nel grafico."}
 risposte_by_city <- risposte %>%
