@@ -17,6 +17,7 @@ library(ggalluvial)
 library(modelsummary)
 library(gridExtra)
 library(epitools)
+library(readxl)
 ```
 
 
@@ -91,15 +92,32 @@ Nel complesso, la proporzione delle persone che pratica attivita' fisica diminui
 
 ## Persone che hanno smesso di praticare: motivazioni
 
+```{r ricodifica-motivazioni}
+motivi_smesso_pratica <- read_excel(file.path(here(), "data/dati_da_controllare_cambiati/motivo_ex_durante_no.xlsx")) %>%
+  dplyr::select(Nomi_iniziali, `NOMI NUOVI`) %>% dplyr::rename(nomi_nuovi=`NOMI NUOVI`)
+motivi_non_praticanti_prima <- read_excel(file.path(here(), "data/dati_da_controllare_cambiati/motivo_ex_pre_no.xlsx")) %>%
+  dplyr::select(Nomi_iniziali, `nomi nuovi`) %>% dplyr::rename(nomi_nuovi=`nomi nuovi`)
+```
+
+
 ```{r motivazioni-si-no}
 cambio_si_no <- risposte %>%
   filter(ex_pre_si_no == "Si" & ex_durante_si_mp == "No") %>%
+  mutate(ex_durante_no_motivo = tolower(ex_durante_no_motivo)) %>%
+  left_join(motivi_smesso_pratica, by = c("ex_durante_no_motivo"="Nomi_iniziali")) %>%
+  dplyr::select(-ex_durante_no_motivo) %>%
+  dplyr::rename(ex_durante_no_motivo = nomi_nuovi) %>%
   group_by(ex_durante_no_motivo) %>%
   summarise(N.Risposte = n()) %>%
   arrange(N.Risposte) %>%
   mutate(ex_durante_no_motivo = fct_reorder(ex_durante_no_motivo, N.Risposte))
 
 knitr::kable(cambio_si_no)
+```
+
+```{r}
+ggplot(cambio_si_no, aes(x=ex_durante_no_motivo,y=N.Risposte)) + geom_bar(stat = "identity") +
+  theme_bw() + coord_flip() + labs(x = "Motivazione che ha portato a smettere di praticare")
 ```
 
 
@@ -122,17 +140,29 @@ prop.table(table(risposte$ex_pre_frequenza))
 ```{r pre-motivazioni-no-si}
 cambio_no_si_pre <- risposte %>%
   filter(ex_pre_si_no == "No" & ex_durante_si_mp == "Si") %>%
-  mutate(ex_pre_no_motivo = ifelse(!(ex_pre_no_motivo %in% c("Mancanza di voglia", "Mancanza di tempo")), "Altro", ex_pre_no_motivo)) %>%
+  mutate(ex_pre_no_motivo = tolower(ex_pre_no_motivo)) %>%
+  left_join(motivi_non_praticanti_prima, by = c("ex_pre_no_motivo"="Nomi_iniziali")) %>%
+  dplyr::select(-ex_pre_no_motivo) %>%
+  dplyr::rename(ex_pre_no_motivo = nomi_nuovi) %>%
+  #mutate(ex_pre_no_motivo = ifelse(!(ex_pre_no_motivo %in% c("Mancanza di voglia", "Mancanza di tempo")), "Altro", ex_pre_no_motivo)) %>%
   group_by(ex_pre_no_motivo) %>%
   summarise(N.Risposte = n()) %>%
   arrange(N.Risposte) %>%
   mutate(ex_pre_no_motivo = fct_reorder(ex_pre_no_motivo, N.Risposte)) 
 
-
 knitr::kable(cambio_no_si_pre)
 ```
 
+
+```{r}
+ggplot(cambio_no_si_pre, aes(x=ex_pre_no_motivo,y=N.Risposte)) + geom_bar(stat = "identity") +
+  theme_bw() + coord_flip() + labs(x = "Motivazione per non praticare prima della quarantena")
+```
+
+
 **Motivazioni per praticare durante la quarantena**
+
+##TODO: dividi tutte le motivazioni e fai grafici
 
 ```{r durante-motivazioni-no-si}
 cambio_no_si <- risposte %>%
@@ -201,9 +231,30 @@ risposte <- risposte %>%
   mutate(forma_fisica_migliorata = factor(forma_fisica_migliorata, 
                                           levels = c("Non praticante", "Per niente", "Ho notato un lieve miglioramento", "Molto")))
 
+
 ggplot(risposte, aes(x = ex_pre_si_no, fill = forma_fisica_migliorata)) +
   geom_bar(position = "dodge", colour="white")+
   theme_bw()+
   labs(x = "Praticavi attivita' fisica\nprima della quarantena?", y = "Numero di persone")
+```
+
+
+
+```{r}
+risposte <- risposte %>%
+  filter(forma_fisica_migliorata != "Non praticante")
+tot_si <- sum(risposte$ex_pre_si_no == "Si")
+tot_no <- sum(risposte$ex_pre_si_no == "No")
+miglioramento_per_gruppo <- risposte %>% 
+  group_by(forma_fisica_migliorata, ex_pre_si_no) %>%
+  summarise(N.partecipanti = n()) %>%
+  mutate(N.partecipanti = case_when(ex_pre_si_no == "Si" ~ N.partecipanti/tot_si,
+                                    ex_pre_si_no == "No" ~ N.partecipanti/tot_no))
+
+ggplot(miglioramento_per_gruppo, aes(x = forma_fisica_migliorata, y = N.partecipanti, colour = ex_pre_si_no)) +
+  geom_point(size=4) + theme_bw() + 
+  labs(x = "Miglioramento nella forma fisica", y = "Percentuale\nCalcolata per gruppi", colour = "Praticavi prima\ndella quarantena?")
+
+knitr::kable(miglioramento_per_gruppo)
 ```
 
