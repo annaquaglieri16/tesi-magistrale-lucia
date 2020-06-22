@@ -210,6 +210,11 @@ ggplot(as.data.frame(tab),
 ```
 
 
+```{r}
+knitr::kable(tab)
+```
+
+
 ```{r barplot-frequenza}
 tab_long <- risposte %>%
   gather(key = Periodo, value = Frequenza, ex_pre_frequenza,ex_durante_frequenza)  %>%
