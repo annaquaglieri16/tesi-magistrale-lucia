@@ -229,7 +229,7 @@ ggplot(as.data.frame(tab),
 
 
 ```{r}
-knitr::kable(tab)
+tab
 ```
 
 ```{r barplot-frequenza}
