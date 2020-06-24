@@ -18,6 +18,7 @@ library(modelsummary)
 library(gridExtra)
 library(epitools)
 library(readxl)
+library(ggExtra)
 ```
 
 
@@ -97,6 +98,8 @@ motivi_smesso_pratica <- read_excel(file.path(here(), "data/dati_da_controllare_
   dplyr::select(Nomi_iniziali, `NOMI NUOVI`) %>% dplyr::rename(nomi_nuovi=`NOMI NUOVI`)
 motivi_non_praticanti_prima <- read_excel(file.path(here(), "data/dati_da_controllare_cambiati/motivo_ex_pre_no.xlsx")) %>%
   dplyr::select(Nomi_iniziali, `nomi nuovi`) %>% dplyr::rename(nomi_nuovi=`nomi nuovi`)
+motivi_esercizi_durante <- read_excel(file.path(here(), "data/dati_da_controllare_cambiati/motivo_ex_durante.xlsx")) %>%
+  dplyr::select(Nomi_iniziali, `NOMI NUOVI`) %>% dplyr::rename(nomi_nuovi=`NOMI NUOVI`)
 ```
 
 
@@ -159,24 +162,39 @@ ggplot(cambio_no_si_pre, aes(x=ex_pre_no_motivo,y=N.Risposte)) + geom_bar(stat =
   theme_bw() + coord_flip() + labs(x = "Motivazione per non praticare prima della quarantena")
 ```
 
-
 **Motivazioni per praticare durante la quarantena**
 
-##TODO: dividi tutte le motivazioni e fai grafici
+```{r include=FALSE}
+cambio_no_si <- risposte %>%
+  filter(ex_pre_si_no == "No" & ex_durante_si_mp == "Si")
+```
+
+* Alcune persone hanno messo piu' di una motivazione per iniziare a praticare. Il grafico sotto mostra la frequenza delle varie motivazioni. In tutto ci sono `r nrow(cambio_no_si)` persone che hanno iniziato a praticare. 
 
 ```{r durante-motivazioni-no-si}
 cambio_no_si <- risposte %>%
   filter(ex_pre_si_no == "No" & ex_durante_si_mp == "Si") %>%
+  mutate(ex_durante_motivo = tolower(ex_durante_motivo)) 
+
+
+lista_motivazioni <- data.frame(ex_durante_motivo = tolower(do.call(c,strsplit(cambio_no_si$ex_durante_motivo,split=";")))) %>%
+  left_join(motivi_esercizi_durante, by = c("ex_durante_motivo"="Nomi_iniziali")) %>%
+  dplyr::select(-ex_durante_motivo) %>%
+  dplyr::rename(ex_durante_motivo = nomi_nuovi) %>%
   group_by(ex_durante_motivo) %>%
   summarise(N.Risposte = n()) %>%
   arrange(N.Risposte) %>%
   mutate(ex_durante_motivo = fct_reorder(ex_durante_motivo, N.Risposte))
-knitr::kable(cambio_no_si)
+knitr::kable(lista_motivazioni)
+```
+
+```{r}
+ggplot(lista_motivazioni, aes(x=ex_durante_motivo,y=N.Risposte)) + geom_bar(stat = "identity") +
+  theme_bw() + coord_flip() + labs(x = "Motivazione per iniziare a praticare durante la quarantena")
 ```
 
 
 # 3. Qual e' stato l'effetto della quarantena sulla frequenza della pratica di attivita' fisica?
-
 
 ```{r all-plot-frequenza}
 risposte <- risposte %>%
@@ -214,7 +232,6 @@ ggplot(as.data.frame(tab),
 knitr::kable(tab)
 ```
 
-
 ```{r barplot-frequenza}
 tab_long <- risposte %>%
   gather(key = Periodo, value = Frequenza, ex_pre_frequenza,ex_durante_frequenza)  %>%
@@ -226,6 +243,46 @@ ggplot(tab_long, aes(x = Frequenza, fill = Periodo)) +
   theme_bw() + coord_flip()
 ```
 
+
+* Converti in numeri
+
+```{r convert-freq-numeri}
+tab_numeri <- tab %>%
+  mutate(Prima = case_when(Prima %in% "Non\npraticante" ~ 0, 
+                           Prima %in% "Meno di una" ~ 1,
+                           Prima %in% "1 o 2" ~ 2,
+                           Prima %in% "Almeno 3" ~ 3, 
+                           Prima %in% "Ogni giorno" ~ 4),
+         Durante = case_when(Durante %in% "Non\npraticante" ~ 0, 
+                           Durante %in% "Meno di una" ~ 1,
+                           Durante %in% "1 o 2" ~ 2,
+                           Durante %in% "Almeno 3" ~ 3, 
+                           Durante %in% "Ogni giorno" ~ 4)) %>%
+  mutate(Cambiamento = Prima - Durante)
+
+p = ggplot(tab, aes(x = Prima, y = Durante, size = Freq)) + geom_point() + theme_bw() 
+```
+
+```{r cambiamento-prima-dopo}
+tab_numeri <- risposte %>%
+  mutate(Prima = case_when(ex_pre_frequenza %in% "Non praticante" ~ 0, 
+                           ex_pre_frequenza %in% "Meno di una volta a settimana" ~ 1,
+                           ex_pre_frequenza %in% "1 o 2 volte a settimana" ~ 2,
+                           ex_pre_frequenza %in% "Almeno 3 volte a settimana" ~ 3, 
+                           ex_pre_frequenza %in% "Tutti i giorni" ~ 4),
+         Durante = case_when(ex_durante_frequenza %in% "Non praticante" ~ 0, 
+                           ex_durante_frequenza %in% "Meno di una volta a settimana" ~ 1,
+                           ex_durante_frequenza %in% "1 o 2 volte a settimana" ~ 2,
+                           ex_durante_frequenza %in% "Almeno 3 volte a settimana" ~ 3, 
+                           ex_durante_frequenza %in% "Tutti i giorni" ~ 4)) %>%
+  mutate(Cambiamento = Prima - Durante)
+
+ggplot(tab_numeri, aes(x = Cambiamento)) + geom_bar() + theme_bw()
+```
+
+```{r t-test-prima-dopo-frequenza}
+t.test(tab_numeri$Cambiamento)
+```
 
 # 5. Quelli che hanno praticato attivita' durante la quarantena, percepiscono un miglioramento nella loro forma fisica?
 
