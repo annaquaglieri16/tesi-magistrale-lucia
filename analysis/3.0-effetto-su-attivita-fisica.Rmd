@@ -246,6 +246,12 @@ ggplot(tab_long, aes(x = Frequenza, fill = Periodo)) +
 
 * Converti in numeri
 
+  - Non praticante = 0
+  - Meno di una volta a settimana = 1,
+  - 1 o 2 volte a settimana = 2,
+  - Almeno 3 volte a settimana = 3, 
+  - Ogni giorno = 4
+
 ```{r convert-freq-numeri}
 tab_numeri <- tab %>%
   mutate(Prima = case_when(Prima %in% "Non\npraticante" ~ 0, 
@@ -260,8 +266,10 @@ tab_numeri <- tab %>%
                            Durante %in% "Ogni giorno" ~ 4)) %>%
   mutate(Cambiamento = Prima - Durante)
 
-p = ggplot(tab, aes(x = Prima, y = Durante, size = Freq)) + geom_point() + theme_bw() 
+ggplot(tab, aes(x = Prima, y = Durante, size = Freq)) + geom_point() + theme_bw() 
 ```
+
+Il grafico sotto mostra la distribuzione della differenza tra la frequenza nella pratica di attivita' fisica prima e dopo. In generale c'e' un numero simile di persone che aumentano o diminuiscono la frequenza (la distribuzione e' piuttosto simmetrica attorno allo zero, media = -0.041 e t-test per l'uguaglianza della media a zero non e' significativo al 5%). La maggior parte delle persone non cambia frequenza.
 
 ```{r cambiamento-prima-dopo}
 tab_numeri <- risposte %>%
