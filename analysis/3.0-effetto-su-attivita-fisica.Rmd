@@ -264,12 +264,12 @@ tab_numeri <- tab %>%
                            Durante %in% "1 o 2" ~ 2,
                            Durante %in% "Almeno 3" ~ 3, 
                            Durante %in% "Ogni giorno" ~ 4)) %>%
-  mutate(Cambiamento = Prima - Durante)
+  mutate(Cambiamento = Durante - Prima)
 
 ggplot(tab, aes(x = Prima, y = Durante, size = Freq)) + geom_point() + theme_bw() 
 ```
 
-Il grafico sotto mostra la distribuzione della differenza tra la frequenza nella pratica di attivita' fisica prima e dopo. In generale c'e' un numero simile di persone che aumentano o diminuiscono la frequenza (la distribuzione e' piuttosto simmetrica attorno allo zero, media = -0.041 e t-test per l'uguaglianza della media a zero non e' significativo al 5%). La maggior parte delle persone non cambia frequenza.
+Il grafico sotto mostra la distribuzione della differenza tra la frequenza nella pratica di attivita' fisica prima e dopo. In generale c'e' un numero simile di persone che aumentano o diminuiscono la frequenza anche se leggeremente piu' persone aumentano la frequenza (la distribuzione e' piuttosto simmetrica attorno allo zero, media = 0.041 e t-test per l'uguaglianza della media a zero non e' significativo al 5%).
 
 ```{r cambiamento-prima-dopo}
 tab_numeri <- risposte %>%
@@ -283,9 +283,9 @@ tab_numeri <- risposte %>%
                            ex_durante_frequenza %in% "1 o 2 volte a settimana" ~ 2,
                            ex_durante_frequenza %in% "Almeno 3 volte a settimana" ~ 3, 
                            ex_durante_frequenza %in% "Tutti i giorni" ~ 4)) %>%
-  mutate(Cambiamento = Prima - Durante)
+  mutate(Cambiamento = Durante - Prima)
 
-ggplot(tab_numeri, aes(x = Cambiamento)) + geom_bar() + theme_bw()
+ggplot(tab_numeri, aes(x = Cambiamento)) + geom_bar() + theme_bw() + labs(x = "Cambiamento\n(Durante - Prima)")
 ```
 
 ```{r t-test-prima-dopo-frequenza}
