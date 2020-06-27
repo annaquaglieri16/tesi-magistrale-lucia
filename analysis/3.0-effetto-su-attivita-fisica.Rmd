@@ -502,6 +502,6 @@ ggplot(praticanti, aes(x= ex_pre_come, fill = ex_durante_come)) + geom_bar(posit
 
 ```{r}
 ggplot(praticanti, aes(x= ex_pre_pt, fill = ex_durante_pt)) + geom_bar(position="fill") + theme_bw()+
-  labs(x = "Metodo prima della quarantena", fill = "Metodo durante la quarantena") 
+  labs(x = "Personal trainer prima della quarantena?", fill = "Personal trainer durante la quarantena?") 
 ```
 
