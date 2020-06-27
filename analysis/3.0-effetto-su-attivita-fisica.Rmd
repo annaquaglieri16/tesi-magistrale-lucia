@@ -182,22 +182,6 @@ praticanti <- risposte %>%
   mutate(praticanti = "Si")
 ```
 
-
-```{r tipo-abitazione-praticanti-e-non}
-prat <- nrow(praticanti)
-non_prat <- nrow(cambio_si_no)
-combine_si_no <- bind_rows(cambio_si_no, praticanti) %>%
-  group_by(tipo_abitazione, praticanti) %>%
-  summarise(n = n()) %>%
-  mutate(percent_praticanti = case_when(praticanti == "No" ~ n/non_prat * 100,
-                                        praticanti == "Si" ~ n/prat * 100))
-
-ggplot(combine_si_no, aes(x = tipo_abitazione, y = percent_praticanti, fill = praticanti)) + 
-  geom_bar(position="dodge", stat = "identity") + theme_bw() +
-  ggtitle("Confronto tra i tipo di abitazione di chi ha smesso di praticare\nattivita' fisica (praticanti=No) e chi ha continuato/iniziato durante la quarantena (praticanti=Si)")
-```
-
-
 * Lo stato professionale non e' stato raccolto per quelli che hanno smesso di praticare attivita'! Per sbaglio..
 
 ## Cos'e' cambiato per quelli che hanno smesso rispetto a quelli che hanno continuato
