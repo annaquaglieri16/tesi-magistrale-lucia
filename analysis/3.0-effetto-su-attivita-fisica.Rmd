@@ -89,6 +89,30 @@ prop.test(yes, numero_persone)
 Nel complesso, la proporzione delle persone che pratica attivita' fisica diminuisce marginalmente, passando dall'`r round(prop.test(yes, numero_persone)$estimate[1],2)`% al `r round(prop.test(yes, numero_persone)$estimate[2],2)`%.
 
 
+# 1.1 Tipi di attivita' fisica praticati prima e durante la quarantena
+
+
+```{r tipi-attivita-prima-durante}
+attivita_prima <- read_excel(file.path(here(), "data/dati_da_controllare_cambiati/tipi_esercizi_pre.xlsx")) %>%
+  dplyr::select(Nomi_iniziali, `NOMI NUOVI`) %>% dplyr::rename(nomi_nuovi=`NOMI NUOVI`)
+attivita_durante <- read_excel(file.path(here(), "data/dati_da_controllare_cambiati/tipi_esercizi_durante.xlsx")) %>%
+  dplyr::select(Nomi_iniziali, `NOMI NUOVI`) %>% dplyr::rename(nomi_nuovi=`NOMI NUOVI`)
+```
+
+```{r merge-con-risposte, eval=FALSE}
+risposte$id1 <- 1
+risposte1 <- risposte %>%
+  mutate(ex_durante = tolower(ex_durante),
+         ex_pre = tolower(ex_pre)) %>%
+  left_join(attivita_prima, by = c("ex_pre"="Nomi_iniziali")) %>%
+  dplyr::select(-ex_pre) %>%
+  dplyr::rename(ex_pre = nomi_nuovi) %>%
+  left_join(attivita_durante, by = c("ex_durante"="Nomi_iniziali")) %>%
+  dplyr::select(-ex_durante) %>%
+  dplyr::rename(ex_durante = nomi_nuovi)
+```
+
+
 # 2. Motivazioni che hanno portato a un cambiamento dell'attitudine a praticare attivita' fisica.
 
 ## Persone che hanno smesso di praticare: motivazioni
@@ -102,11 +126,20 @@ motivi_esercizi_durante <- read_excel(file.path(here(), "data/dati_da_controllar
   dplyr::select(Nomi_iniziali, `NOMI NUOVI`) %>% dplyr::rename(nomi_nuovi=`NOMI NUOVI`)
 ```
 
+* Metti a posto abitazione e stato professionale
+
+```{r abitazione}
+casa <- read_excel(file.path(here(), "data/dati_da_controllare_cambiati/tipo_abitazione.xlsx")) %>%
+  dplyr::select(Nomi_iniziali, `NOMI NUOVI`) %>% dplyr::rename(nomi_nuovi=`NOMI NUOVI`)
+professione <- read_excel(file.path(here(), "data/dati_da_controllare_cambiati/stato_prof.xlsx")) %>%
+  dplyr::select(Nomi_iniziali, `NOMI NUOVI`) %>% dplyr::rename(nomi_nuovi=`NOMI NUOVI`)
+```
 
 ```{r motivazioni-si-no}
 cambio_si_no <- risposte %>%
   filter(ex_pre_si_no == "Si" & ex_durante_si_mp == "No") %>%
   mutate(ex_durante_no_motivo = tolower(ex_durante_no_motivo)) %>%
+  # Merge motivi
   left_join(motivi_smesso_pratica, by = c("ex_durante_no_motivo"="Nomi_iniziali")) %>%
   dplyr::select(-ex_durante_no_motivo) %>%
   dplyr::rename(ex_durante_no_motivo = nomi_nuovi) %>%
@@ -126,12 +159,37 @@ ggplot(cambio_si_no, aes(x=ex_durante_no_motivo,y=N.Risposte)) + geom_bar(stat =
 
 ```{r demographics-si-no}
 cambio_si_no <- risposte %>%
-  filter(ex_pre_si_no == "Si" & ex_durante_si_mp == "No") 
+  filter(ex_pre_si_no == "Si" & ex_durante_si_mp == "No") %>%
+  mutate(tipo_abitazione = tolower(tipo_abitazione)) %>%
+  left_join(casa, by = c("tipo_abitazione"="Nomi_iniziali")) %>%
+  dplyr::select(-tipo_abitazione) %>%
+  dplyr::rename(tipo_abitazione = nomi_nuovi) %>%
+  # professione
+  mutate(stato_prof_durante = tolower(stato_prof_durante)) %>%
+  left_join(professione, by = c("stato_prof_durante"="Nomi_iniziali")) %>%
+  dplyr::select(-stato_prof_durante) %>%
+  dplyr::rename(stato_prof_durante = nomi_nuovi)
 
 prop.table(table(risposte$ex_pre_dove))
 prop.table(table(risposte$ex_pre_frequenza))
-#prop.table(table(risposte$stato_prof_durante))
 ```
+
+
+```{r}
+#ggplot(risposte, aes(x = stato_prof_durante)) + geom_bar() + theme_bw() + coord_flip()
+```
+
+* Sembra che lo stato professionale contenga ancora molte categorie
+
+```{r}
+prop.table(table(cambio_si_no$stato_prof_durante))
+```
+
+
+```{r}
+prop.table(table(cambio_si_no$tipo_abitazione))
+```
+
 
 - Che differenze ci sono tra le persone che hanno smesso di fare attivita' rispetto a quelle che hanno continuato?
 - Quali erano le motivazioni a praticare attivita' di queste persone rispetto a quelli che non hanno smesso di praticare? (Eta'?)
@@ -327,4 +385,13 @@ ggplot(miglioramento_per_gruppo, aes(x = forma_fisica_migliorata, y = N.partecip
 
 knitr::kable(miglioramento_per_gruppo)
 ```
+
+
+# Per quelli che praticavano anche prima della quarantena, come si sono adattati alla situazione?
+
+```{r}
+
+```
+
+
 
