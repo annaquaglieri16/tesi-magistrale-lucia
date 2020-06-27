@@ -164,31 +164,41 @@ cambio_si_no <- risposte %>%
   left_join(casa, by = c("tipo_abitazione"="Nomi_iniziali")) %>%
   dplyr::select(-tipo_abitazione) %>%
   dplyr::rename(tipo_abitazione = nomi_nuovi) %>%
-  # professione
-  mutate(stato_prof_durante = tolower(stato_prof_durante)) %>%
-  left_join(professione, by = c("stato_prof_durante"="Nomi_iniziali")) %>%
-  dplyr::select(-stato_prof_durante) %>%
-  dplyr::rename(stato_prof_durante = nomi_nuovi)
+  mutate(praticanti = "No")
 
-prop.table(table(risposte$ex_pre_dove))
-prop.table(table(risposte$ex_pre_frequenza))
+prop.table(table(cambio_si_no$ex_pre_dove))
+prop.table(table(cambio_si_no$ex_pre_frequenza))
 ```
 
+* Il tipo di abitazione o stato professionale e' diverso in quelli che hanno smesso di praticare rispetto agli altri?
 
 ```{r}
-#ggplot(risposte, aes(x = stato_prof_durante)) + geom_bar() + theme_bw() + coord_flip()
+praticanti <- risposte %>%
+  filter(ex_durante_si_mp == "Si") %>%
+  mutate(tipo_abitazione = tolower(tipo_abitazione)) %>%
+  left_join(casa, by = c("tipo_abitazione"="Nomi_iniziali")) %>%
+  dplyr::select(-tipo_abitazione) %>%
+  dplyr::rename(tipo_abitazione = nomi_nuovi) %>%
+  mutate(praticanti = "Si")
 ```
 
-* Sembra che lo stato professionale contenga ancora molte categorie
 
-```{r}
-prop.table(table(cambio_si_no$stato_prof_durante))
+```{r tipo-abitazione-praticanti-e-non}
+prat <- nrow(praticanti)
+non_prat <- nrow(cambio_si_no)
+combine_si_no <- bind_rows(cambio_si_no, praticanti) %>%
+  group_by(tipo_abitazione, praticanti) %>%
+  summarise(n = n()) %>%
+  mutate(percent_praticanti = case_when(praticanti == "No" ~ n/non_prat * 100,
+                                        praticanti == "Si" ~ n/prat * 100))
+
+ggplot(combine_si_no, aes(x = tipo_abitazione, y = percent_praticanti, fill = praticanti)) + 
+  geom_bar(position="dodge", stat = "identity") + theme_bw() +
+  ggtitle("Confronto tra i tipo di abitazione di chi ha smesso di praticare\nattivita' fisica (praticanti=No) e chi ha continuato/iniziato durante la quarantena (praticanti=Si)")
 ```
 
 
-```{r}
-prop.table(table(cambio_si_no$tipo_abitazione))
-```
+* Lo stato professionale non e' stato raccolto per quelli che hanno smesso di praticare attivita'! Per sbaglio..
 
 
 - Che differenze ci sono tra le persone che hanno smesso di fare attivita' rispetto a quelle che hanno continuato?
