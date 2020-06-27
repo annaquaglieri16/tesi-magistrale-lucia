@@ -200,9 +200,102 @@ ggplot(combine_si_no, aes(x = tipo_abitazione, y = percent_praticanti, fill = pr
 
 * Lo stato professionale non e' stato raccolto per quelli che hanno smesso di praticare attivita'! Per sbaglio..
 
+## Cos'e' cambiato per quelli che hanno smesso rispetto a quelli che hanno continuato
 
-- Che differenze ci sono tra le persone che hanno smesso di fare attivita' rispetto a quelle che hanno continuato?
-- Quali erano le motivazioni a praticare attivita' di queste persone rispetto a quelli che non hanno smesso di praticare? (Eta'?)
+### Abitazione
+
+```{r eta-praticanti-e-non}
+
+prat <- nrow(praticanti)
+non_prat <- nrow(cambio_si_no)
+combine_si_no <- bind_rows(cambio_si_no, praticanti) %>%
+  group_by(tipo_abitazione, praticanti) %>%
+  summarise(n = n()) %>%
+  mutate(percent_praticanti = case_when(praticanti == "No" ~ n/non_prat * 100,
+                                        praticanti == "Si" ~ n/prat * 100))
+
+ggplot(combine_si_no, aes(x = tipo_abitazione, y = percent_praticanti, fill = praticanti)) + 
+  geom_bar(position="dodge", stat = "identity") + theme_bw() +
+  ggtitle("Confronto tra i tipo di abitazione di chi ha smesso di praticare\nattivita' fisica (praticanti=No) e chi ha continuato/iniziato durante la quarantena (praticanti=Si)")
+```
+
+Ci sono `r prat` partecipanti che hanno continuato/iniziato a praticare e `r non_prat` che hanno smesso. 
+
+### Stato professionale non raccolto
+
+### Luogo della pratica
+
+```{r aperto-chiuso-praticanti-e-non}
+praticanti <- risposte %>%
+  filter(ex_pre_si_no == "Si" & ex_durante_si_mp == "Si") %>%
+  mutate(praticanti = "Si")
+
+prat <- nrow(praticanti)
+non_prat <- nrow(cambio_si_no)
+combine_si_no <- bind_rows(cambio_si_no, praticanti) %>%
+  group_by(ex_pre_dove, praticanti) %>%
+  summarise(n = n()) %>%
+  mutate(percent_praticanti = case_when(praticanti == "No" ~ n/non_prat * 100,
+                                        praticanti == "Si" ~ n/prat * 100))
+
+combine_si_no
+
+ggplot(combine_si_no, aes(x = ex_pre_dove, y = percent_praticanti, fill = praticanti)) + 
+  geom_bar(position="dodge", stat = "identity") + theme_bw() +
+  ggtitle("Confronto tra luogo dell'attivita' tra chi ha smesso di praticare\nattivita' fisica (praticanti=No) e chi ha continuato durante la quarantena (praticanti=Si)")+ labs(x = "Luogo dell'attivita' fisica prima della quarantena")
+```
+
+Ci sono `r prat` partecipanti che hanno continuato a praticare e `r non_prat` che hanno smesso. 
+
+### Metodo della pratica
+
+```{r metodo-praticanti-e-non}
+praticanti <- risposte %>%
+  filter(ex_pre_si_no == "Si" & ex_durante_si_mp == "Si") %>%
+  mutate(praticanti = "Si")
+
+prat <- nrow(praticanti)
+non_prat <- nrow(cambio_si_no)
+combine_si_no <- bind_rows(cambio_si_no, praticanti) %>%
+  group_by(ex_pre_come, praticanti) %>%
+  summarise(n = n()) %>%
+  mutate(percent_praticanti = case_when(praticanti == "No" ~ n/non_prat * 100,
+                                        praticanti == "Si" ~ n/prat * 100))
+
+combine_si_no
+
+ggplot(combine_si_no, aes(x = ex_pre_come, y = percent_praticanti, fill = praticanti)) + 
+  geom_bar(position="dodge", stat = "identity") + theme_bw() +
+  ggtitle("Confronto tra metodo dell'attivita' tra chi ha smesso di praticare\nattivita' fisica (praticanti=No) e chi ha continuato durante la quarantena (praticanti=Si)")+ labs(x = "Metodo di attivita' fisica prima della quarantena")
+```
+
+Ci sono `r prat` partecipanti che hanno continuato a praticare e `r non_prat` che hanno smesso. 
+
+
+### Personal trainer?
+
+```{r personal-trainer-praticanti-e-non}
+praticanti <- risposte %>%
+  filter(ex_pre_si_no == "Si" & ex_durante_si_mp == "Si") %>%
+  mutate(praticanti = "Si")
+
+prat <- nrow(praticanti)
+non_prat <- nrow(cambio_si_no)
+combine_si_no <- bind_rows(cambio_si_no, praticanti) %>%
+  group_by(ex_pre_pt, praticanti) %>%
+  summarise(n = n()) %>%
+  mutate(percent_praticanti = case_when(praticanti == "No" ~ n/non_prat * 100,
+                                        praticanti == "Si" ~ n/prat * 100))
+
+combine_si_no
+
+ggplot(combine_si_no, aes(x = ex_pre_pt, y = percent_praticanti, fill = praticanti)) + 
+  geom_bar(position="dodge", stat = "identity") + theme_bw() +
+  ggtitle("Confronto tra metodo dell'attivita' tra chi ha smesso di praticare\nattivita' fisica (praticanti=No) e chi ha continuato durante la quarantena (praticanti=Si)") + labs(x = "Attivita' fisica con personal trainer prima della quarantena?")
+```
+
+Ci sono `r prat` partecipanti che hanno continuato a praticare e `r non_prat` che hanno smesso. 
+
 
 ## Persone che hanno iniziato a praticare: motivazioni
 
