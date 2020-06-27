@@ -474,11 +474,34 @@ knitr::kable(miglioramento_per_gruppo)
 ```
 
 
-# Per quelli che praticavano anche prima della quarantena, come si sono adattati alla situazione?
+# 6. Per quelli che praticavano anche prima della quarantena, come si sono adattati alla situazione?
 
 ```{r}
-
+praticanti <- risposte %>%
+  filter(ex_pre_si_no == "Si" & ex_durante_si_mp == "Si") %>%
+  mutate(ex_durante_dove = ifelse(ex_durante_dove == "All'aperto (ad esempio giardino)", "All'aperto", ex_durante_dove))
 ```
 
 
+## Luogo dell'attivita' 
+
+```{r}
+ggplot(praticanti, aes(x= ex_pre_dove, fill = ex_durante_dove)) + geom_bar(position="fill") + theme_bw()+
+  labs(x = "Luogo prima della quarantena", fill = "Luogo durante la quarantena") 
+```
+
+## Metodo dell'attivita' 
+
+```{r}
+ggplot(praticanti, aes(x= ex_pre_come, fill = ex_durante_come)) + geom_bar(position="fill") + theme_bw()+
+  labs(x = "Metodo prima della quarantena", fill = "Metodo durante la quarantena") 
+```
+
+
+## Personal trainer
+
+```{r}
+ggplot(praticanti, aes(x= ex_pre_pt, fill = ex_durante_pt)) + geom_bar(position="fill") + theme_bw()+
+  labs(x = "Metodo prima della quarantena", fill = "Metodo durante la quarantena") 
+```
 
