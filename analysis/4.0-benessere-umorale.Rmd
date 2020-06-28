@@ -201,7 +201,7 @@ ggplot() +
 ```
 
 
-```{r barplots-classe-umore}
+```{r barplots-classe-umore, fig.height=10, fig.width=10}
 risposte_umore <- risposte_var_numeric %>%
   group_by(classe_umore, comune) %>%
   summarise(media = mean(differenze_durante_prima)) %>%
@@ -221,7 +221,7 @@ ggplot(risposte_umore, aes(x = comune, y = media, fill = media)) +
 ## Umori singoli uno per uno
 
 
-```{r barplots-umori-singoli}
+```{r barplots-umori-singoli, fig.height=10, fig.width=10}
 risposte_umore <- risposte_var_numeric %>%
   group_by(Umore, regione) %>%
   summarise(media = mean(differenze_durante_prima)) %>%
