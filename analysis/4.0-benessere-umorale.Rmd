@@ -19,6 +19,12 @@ library(gridExtra)
 library(epitools)
 library(readxl)
 library(ggExtra)
+
+library(ggmap)
+library(maps)
+library(mapproj)
+library(viridis)
+library(ggrepel)
 ```
 
 
@@ -139,3 +145,96 @@ ggplot(risposte_var_numeric, aes(x = differenze_durante_prima, fill = pratica_du
 # Distribuzione geografica delle sensazioni 
 
 Mostra la mappa dell'Italia con le varie sensazioni durante e la differenza tra prima e dopo
+
+
+```{r load-geo}
+# Get the world polygon and extract UK
+italy <- map_data("world") %>% 
+  filter(region=="Italy")
+
+cities <- world.cities %>% 
+  filter(country.etc=="Italy") %>%
+  dplyr::rename(paese_residenza=name) %>%
+  mutate(paese_residenza=tolower(paese_residenza))
+
+# Regioni
+province <- map_data("italy")
+```
+
+## In generale umori positivi vs umori negativi
+
+```{r fig.height=12, fig.width=12}
+risposte_by_city <- risposte %>%
+  left_join(cities, by = c("comune" = "paese_residenza")) %>%
+  group_by(comune, lat, long) %>%
+  summarise(numero_risposte = n())
+
+mybreaks <- round(seq(
+  min(risposte_by_city$numero_risposte),
+  max(risposte_by_city$numero_risposte), length.out = 5))
+
+risposte_var_numeric <- risposte_var_numeric %>%
+  left_join(cities, by = c("comune" = "paese_residenza")) %>%
+  left_join(risposte_by_city)
+
+ggplot() +
+  geom_polygon(data = italy, aes(x= long, y = lat, group = group), fill="grey", alpha=0.3) +
+  geom_point(data=risposte_var_numeric, aes(x= long, y= lat, 
+            size = numero_risposte, colour=differenze_durante_prima), 
+            shape=20, stroke=FALSE) +
+  scale_size_continuous(name="Numero risposte", range=c(1,12), breaks = mybreaks) +
+  #scale_color_viridis(name="Cambio in umore\nDurante-Prima", breaks = c(-3.6,0,3.6), labels = c("Diminuito","Invariato", "Cresciuto")) +
+  scale_colour_gradient2(low = "#5e3c99", high = "#e66101", mid = "white", breaks = c(-3.6,0,3.6), labels = c("Diminuito","Invariato", "Cresciuto"))+
+  theme_void() + coord_map() + 
+  geom_text_repel(data=risposte_by_city %>% arrange(numero_risposte) %>% tail(20), 
+                  aes(x=long, y=lat, label=toupper(comune)), size=2,
+                  segment.size = 0.2)+
+  ggtitle("Risposte per provincia") +
+  theme(
+      text = element_text(color = "#22211d"),
+      plot.background = element_rect(fill = "white", color = NA), 
+      panel.background = element_rect(fill = "white", color = NA), 
+      legend.background = element_rect(fill = "white", color = NA),
+      plot.title = element_text(size= 16, hjust=0.1, color = "#4e4d47")) +
+  facet_wrap(~classe_umore)
+  #theme(legend.position = "bottom")
+```
+
+
+```{r barplots-classe-umore}
+risposte_umore <- risposte_var_numeric %>%
+  group_by(classe_umore, comune) %>%
+  summarise(media = mean(differenze_durante_prima)) %>%
+  mutate(comune = fct_reorder(comune, media))
+
+ggplot(risposte_umore, aes(x = comune, y = media, fill = media)) + 
+  geom_bar(stat= "identity")+
+  facet_wrap(~classe_umore) +
+  scale_fill_gradient2(low = "#5e3c99", high = "#e66101", mid = "white", 
+                       limits = c(-4,4), breaks = c(-3.6,0,3.6), labels = c("Diminuito","Invariato", "Cresciuto"))+
+  theme_classic() +
+  coord_flip() +
+  labs(x = "Comune", y = "Media differenza di umore Durante-Prima per comune")
+```
+
+
+## Umori singoli uno per uno
+
+
+```{r barplots-umori-singoli}
+risposte_umore <- risposte_var_numeric %>%
+  group_by(Umore, regione) %>%
+  summarise(media = mean(differenze_durante_prima)) %>%
+  mutate(comune = fct_reorder(regione, media),
+         Umore = factor(Umore, levels = c(positive, negative))) 
+
+ggplot(risposte_umore, aes(x = regione, y = media, fill = media)) + 
+  geom_bar(stat= "identity")+
+  facet_wrap(~Umore) +
+  scale_fill_gradient2(low = "#5e3c99", high = "#e66101", mid = "white", 
+                       limits = c(-4,4), breaks = c(-3.6,0,3.6), labels = c("Diminuito","Invariato", "Cresciuto"))+
+  theme_classic() +
+  coord_flip() +
+  labs(x = "Regione", y = "Media") + ggtitle("Media della differenza di umore Durante-Prima per regione")
+```
+
