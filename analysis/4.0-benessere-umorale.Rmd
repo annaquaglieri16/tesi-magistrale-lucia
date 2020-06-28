@@ -41,7 +41,7 @@ risposte <- risposte %>%
   mutate(pratica = factor(pratica, levels = c("continuato", "smesso", "mai praticato", "iniziato")))
 ```
 
-# Modelli univariati
+# Analisi univariata
 
 Inizialmente ho ricodificato le risposte sullo stato umorale in numeri per vedere se c'e' stata una diminuzione o aumento generale. La ricodifica e' stata fatta in questo modo:
 
@@ -104,7 +104,7 @@ ggplot(risposte_var_numeric, aes(x = differenze_durante_prima, fill = Umore)) + 
 ```
 
 
-## La differenza e' stata influenzata da qualche fattore in particolare?
+## La differenza e' stata influenzata dalla pratica di attivita'?
 
 In particolare dall'attivita' fisica. Nei grafici sotto, invece che mostrare i numeri totali delle persone mostro la proporzione dei livelli dei gruppi (diversi colori) nelle varie barre. 
 
@@ -126,4 +126,16 @@ ggplot(risposte_var_numeric, aes(x = differenze_durante_prima, fill = pratica_du
   ggtitle("Valori positivi = la sensazione e' aumetata durante la quarantena\nValori negativi = la sensazione e' diminuita durante la quarantena")
 ```
 
+## Modelli 
 
+- Per ogni sensazione fai modello lineare con umore durante e pratica di attivita' e tipo abitazione, sesso, eta
+- Per ogni sensazione fai modello multinomial con prima e dopo e pratica di attivita' (e tipo abitazione), sesso, eta
+
+```{r modelli-univariati}
+
+```
+
+
+# Distribuzione geografica delle sensazioni 
+
+Mostra la mappa dell'Italia con le varie sensazioni durante e la differenza tra prima e dopo

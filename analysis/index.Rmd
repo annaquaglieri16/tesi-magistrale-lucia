@@ -49,9 +49,10 @@ Descrizione del campione che siamo riusciti a raggiungere:
   - lavoro che praticano
   - Provincia/regione di provenienza (plotta prima e dopo rispetto alle regioni)
   
-## Aspetto umorale
+## [Aspetto umorale](4.0-benessere-umorale.html) 
 
-- Modelli univariati per vedere il cambiamento nella percezione tra prima e dopo di ogni sensazione
-- Modelli includendo altri aspetti come se prima praticavano attivita' sportiva e in che modo e se e' cambiato lo stato professionale
-
+1. C'e' stata una diminuzione o aumento in generale dei diversi tipi di umore?
+2. La differenza e' stata influenzata dalla pratica di attivita'?
+3. Modelli per vedere l'effetto di eta, sesso, pratica sulle senzaioni
+4. Distribuzione geografica delle sensazioni 
 
