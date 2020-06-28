@@ -1,0 +1,129 @@
+---
+title: "Effetto della quarantena e attivita' fisica sul benessere umorale"
+author: "Anna Quaglieri"
+date: "31/05/2020"
+output: 
+  html_document:
+    toc: true
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(readr)
+library(tidyverse)
+library(googledrive)
+library(here)
+library(ggalluvial)
+library(modelsummary)
+library(gridExtra)
+library(epitools)
+library(readxl)
+library(ggExtra)
+```
+
+
+```{r read-data}
+risposte <- read_csv(file.path(here(),"data/risposte-con-regioni.csv"))
+```
+
+* Crea nuova variabile per cambio in attivita'
+
+```{r}
+risposte <- risposte %>%
+  mutate(pratica = case_when(ex_pre_si_no == "Si" & ex_durante_si_mp == "Si" ~ "continuato",
+                             ex_pre_si_no == "Si" & ex_durante_si_mp == "No" ~ "smesso",
+                             ex_pre_si_no == "No" & ex_durante_si_mp == "No" ~ "mai praticato",
+                             ex_pre_si_no == "No" & ex_durante_si_mp == "Si" ~ "iniziato"), 
+         pratica_durante = case_when(ex_pre_si_no == "Si" & ex_durante_si_mp == "Si" ~ "Si",
+                             ex_pre_si_no == "Si" & ex_durante_si_mp == "No" ~ "No",
+                             ex_pre_si_no == "No" & ex_durante_si_mp == "No" ~ "No",
+                             ex_pre_si_no == "No" & ex_durante_si_mp == "Si" ~ "Si"), ) %>%
+  mutate(pratica = factor(pratica, levels = c("continuato", "smesso", "mai praticato", "iniziato")))
+```
+
+# Modelli univariati
+
+Inizialmente ho ricodificato le risposte sullo stato umorale in numeri per vedere se c'e' stata una diminuzione o aumento generale. La ricodifica e' stata fatta in questo modo:
+
+- Mai = 0
+- Raramente = 1
+- Ogni tanto = 2
+- Spesso = 3
+- Ogni giorno = 4
+
+```{r numeric-variables}
+umori <- c("ansia", "tristezza", "stress", "rabbia", "felicita", "entusiasmo", "calma", "soddisfazione")
+var_pre <- paste0(umori, "_pre")
+var_durante <- paste0(umori, "_durante")
+positive <- c("felicita", "entusiasmo", "calma", "soddisfazione")
+negative <- c("ansia", "tristezza", "stress", "rabbia")
+
+risposte_var_numeric <- risposte %>%
+  mutate_at(.vars = c(var_pre, var_durante),
+      funs(case_when(
+    . == "Mai" ~ 0,
+    . == "Raramente" ~ 1,
+     . == "Ogni tanto" ~ 2,
+     . == "Spesso" ~ 3,
+     . == "Ogni giorno" ~ 4)))
+```
+
+## C'e' stata una diminuzione o aumento in generale dei diversi tipi di umore?
+
+```{r differenze}
+risposte_var_numeric <- risposte_var_numeric %>%
+  mutate(ansia = ansia_durante - ansia_pre,
+         tristezza = tristezza_durante - tristezza_pre,
+         stress = stress_durante - stress_pre,
+         rabbia = rabbia_durante - rabbia_pre,
+         felicita = felicita_durante - felicita_pre,
+         entusiasmo = entusiasmo_durante - entusiasmo_pre,
+         calma = calma_durante - calma_pre,
+         soddisfazione = soddisfazione_durante - soddisfazione_pre) %>%
+  pivot_longer(ansia:soddisfazione, names_to = "Umore", values_to = "differenze_durante_prima") 
+
+risposte_var_numeric <- risposte_var_numeric %>%
+  mutate(classe_umore = ifelse(Umore %in% c("felicita", "entusiasmo",
+                                               "calma", "soddisfazione"), "Umori positivi","Umori negativi"))
+```
+
+
+Dato che stiamo guardando alla differenza tra prima e dopo, si avranno valori negativi se **prima** della quarantena i partecipanti hanno messo valori piu' alti rispetto al **durante** per certi aspetti umorali e viceversa, valori positivi se **durante** e' maggiore di **prima**.
+
+```{r grafico_differenza}
+ggplot(risposte_var_numeric, aes(x = differenze_durante_prima)) + geom_bar() +
+  facet_wrap(~Umore) + theme_classic()+ scale_x_continuous(breaks = seq(-4,4,1)) + labs(x = "Differenza in umore: Durante - Prima")+
+  ggtitle("Valori positivi = la sensazione e' aumetata durante la quarantena\nValori negativi = la sensazione e' diminuita durante la quarantena")
+```
+
+```{r grafico_differenza_class}
+ggplot(risposte_var_numeric, aes(x = differenze_durante_prima, fill = Umore)) + geom_bar() +
+  facet_wrap(~classe_umore) + theme_classic() + 
+  scale_x_continuous(breaks = seq(-4,4,1)) + labs(x = "Differenza in umore: Durante - Prima")+
+  ggtitle("Valori positivi = la sensazione e' aumetata durante la quarantena\nValori negativi = la sensazione e' diminuita durante la quarantena")
+```
+
+
+## La differenza e' stata influenzata da qualche fattore in particolare?
+
+In particolare dall'attivita' fisica. Nei grafici sotto, invece che mostrare i numeri totali delle persone mostro la proporzione dei livelli dei gruppi (diversi colori) nelle varie barre. 
+
+```{r umore_pratica}
+ggplot(risposte_var_numeric, aes(x = differenze_durante_prima, fill = pratica)) + geom_bar(position = "fill") +
+  facet_wrap(~Umore) + theme_classic()+ scale_x_continuous(breaks = seq(-4,4,1)) + labs(x = "Differenza in umore: Durante - Prima")+
+  ggtitle("Valori positivi = la sensazione e' aumetata durante la quarantena\nValori negativi = la sensazione e' diminuita durante la quarantena")
+```
+
+```{r umore_pratica_fill}
+ggplot(risposte_var_numeric, aes(x = differenze_durante_prima, fill = pratica_durante)) + geom_bar(position = "fill") +
+  facet_wrap(~Umore) + theme_classic()+ scale_x_continuous(breaks = seq(-4,4,1)) + labs(x = "Differenza in umore: Durante - Prima")+
+  ggtitle("Valori positivi = la sensazione e' aumetata durante la quarantena\nValori negativi = la sensazione e' diminuita durante la quarantena")
+```
+
+```{r umore_pratica_01}
+ggplot(risposte_var_numeric, aes(x = differenze_durante_prima, fill = pratica_durante)) + geom_bar() +
+  facet_wrap(~Umore) + theme_classic()+ scale_x_continuous(breaks = seq(-4,4,1)) + labs(x = "Differenza in umore: Durante - Prima")+
+  ggtitle("Valori positivi = la sensazione e' aumetata durante la quarantena\nValori negativi = la sensazione e' diminuita durante la quarantena")
+```
+
+
