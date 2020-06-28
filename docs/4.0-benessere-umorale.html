@@ -500,16 +500,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomannaquaglieri16tesimagistraleluciatreefe616a73522c3ffbaf4a0dbd08bb906eef4c4fbbtargetblankfe616a7a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/tree/fe616a73522c3ffbaf4a0dbd08bb906eef4c4fbb" target="_blank">fe616a7</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomannaquaglieri16tesimagistraleluciatreea12c67990576bbee50d9369145c61143e1a7bea7targetblanka12c679a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/tree/a12c67990576bbee50d9369145c61143e1a7bea7" target="_blank">a12c679</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomannaquaglieri16tesimagistraleluciatreefe616a73522c3ffbaf4a0dbd08bb906eef4c4fbbtargetblankfe616a7a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomannaquaglieri16tesimagistraleluciatreea12c67990576bbee50d9369145c61143e1a7bea7targetblanka12c679a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/tree/fe616a73522c3ffbaf4a0dbd08bb906eef4c4fbb" target="_blank">fe616a7</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/tree/a12c67990576bbee50d9369145c61143e1a7bea7" target="_blank">a12c679</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -521,9 +521,6 @@ Ignored files:
     Ignored:    .Rproj.user/
     Ignored:    data/dati_da_controllare/
     Ignored:    data/dati_da_controllare_cambiati/
-
-Unstaged changes:
-    Modified:   analysis/3.0-effetto-su-attivita-fisica.Rmd
 
 </code></pre>
 <p>
@@ -567,6 +564,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/blob/a12c67990576bbee50d9369145c61143e1a7bea7/analysis/4.0-benessere-umorale.Rmd" target="_blank">a12c679</a>
+</td>
+<td>
+Anna Quaglieri
+</td>
+<td>
+2020-06-28
+</td>
+<td>
+wflow_publish(c(“analysis/index.Rmd”, “analysis/4.0-benessere-umorale.Rmd”,
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/annaquaglieri16/tesi-magistrale-lucia/223523a2e8f0a00fdbb403ae2c310fedc10ee64a/docs/4.0-benessere-umorale.html" target="_blank">223523a</a>
+</td>
+<td>
+Anna Quaglieri
+</td>
+<td>
+2020-06-28
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/blob/fe616a73522c3ffbaf4a0dbd08bb906eef4c4fbb/analysis/4.0-benessere-umorale.Rmd" target="_blank">fe616a7</a>
 </td>
 <td>
@@ -589,8 +620,8 @@ wflow_publish(“analysis/4.0-benessere-umorale.Rmd”)
 <ul>
 <li>Crea nuova variabile per cambio in attivita’</li>
 </ul>
-<div id="modelli-univariati" class="section level1">
-<h1>Modelli univariati</h1>
+<div id="analisi-univariata" class="section level1">
+<h1>Analisi univariata</h1>
 <p>Inizialmente ho ricodificato le risposte sullo stato umorale in numeri per vedere se c’e’ stata una diminuzione o aumento generale. La ricodifica e’ stata fatta in questo modo:</p>
 <ul>
 <li>Mai = 0</li>
@@ -603,14 +634,211 @@ wflow_publish(“analysis/4.0-benessere-umorale.Rmd”)
 <h2>C’e’ stata una diminuzione o aumento in generale dei diversi tipi di umore?</h2>
 <p>Dato che stiamo guardando alla differenza tra prima e dopo, si avranno valori negativi se <strong>prima</strong> della quarantena i partecipanti hanno messo valori piu’ alti rispetto al <strong>durante</strong> per certi aspetti umorali e viceversa, valori positivi se <strong>durante</strong> e’ maggiore di <strong>prima</strong>.</p>
 <p><img src="figure/4.0-benessere-umorale.Rmd/grafico_differenza-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p><img src="figure/4.0-benessere-umorale.Rmd/grafico_differenza_class-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-grafico_differenza-1">
+Past versions of grafico_differenza-1.png
+</button>
+</p>
+<div id="fig-grafico_differenza-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/blob/223523a2e8f0a00fdbb403ae2c310fedc10ee64a/docs/figure/4.0-benessere-umorale.Rmd/grafico_differenza-1.png" target="_blank">223523a</a>
+</td>
+<td>
+Anna Quaglieri
+</td>
+<td>
+2020-06-28
+</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="la-differenza-e-stata-influenzata-da-qualche-fattore-in-particolare" class="section level2">
-<h2>La differenza e’ stata influenzata da qualche fattore in particolare?</h2>
+</div>
+<p><img src="figure/4.0-benessere-umorale.Rmd/grafico_differenza_class-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-grafico_differenza_class-1">
+Past versions of grafico_differenza_class-1.png
+</button>
+</p>
+<div id="fig-grafico_differenza_class-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/blob/223523a2e8f0a00fdbb403ae2c310fedc10ee64a/docs/figure/4.0-benessere-umorale.Rmd/grafico_differenza_class-1.png" target="_blank">223523a</a>
+</td>
+<td>
+Anna Quaglieri
+</td>
+<td>
+2020-06-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="la-differenza-e-stata-influenzata-dalla-pratica-di-attivita" class="section level2">
+<h2>La differenza e’ stata influenzata dalla pratica di attivita’?</h2>
 <p>In particolare dall’attivita’ fisica. Nei grafici sotto, invece che mostrare i numeri totali delle persone mostro la proporzione dei livelli dei gruppi (diversi colori) nelle varie barre.</p>
 <p><img src="figure/4.0-benessere-umorale.Rmd/umore_pratica-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-umore_pratica-1">
+Past versions of umore_pratica-1.png
+</button>
+</p>
+<div id="fig-umore_pratica-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/blob/223523a2e8f0a00fdbb403ae2c310fedc10ee64a/docs/figure/4.0-benessere-umorale.Rmd/umore_pratica-1.png" target="_blank">223523a</a>
+</td>
+<td>
+Anna Quaglieri
+</td>
+<td>
+2020-06-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p><img src="figure/4.0-benessere-umorale.Rmd/umore_pratica_fill-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-umore_pratica_fill-1">
+Past versions of umore_pratica_fill-1.png
+</button>
+</p>
+<div id="fig-umore_pratica_fill-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/blob/223523a2e8f0a00fdbb403ae2c310fedc10ee64a/docs/figure/4.0-benessere-umorale.Rmd/umore_pratica_fill-1.png" target="_blank">223523a</a>
+</td>
+<td>
+Anna Quaglieri
+</td>
+<td>
+2020-06-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p><img src="figure/4.0-benessere-umorale.Rmd/umore_pratica_01-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-umore_pratica_01-1">
+Past versions of umore_pratica_01-1.png
+</button>
+</p>
+<div id="fig-umore_pratica_01-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/annaquaglieri16/tesi-magistrale-lucia/blob/223523a2e8f0a00fdbb403ae2c310fedc10ee64a/docs/figure/4.0-benessere-umorale.Rmd/umore_pratica_01-1.png" target="_blank">223523a</a>
+</td>
+<td>
+Anna Quaglieri
+</td>
+<td>
+2020-06-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="modelli" class="section level2">
+<h2>Modelli</h2>
+<ul>
+<li>Per ogni sensazione fai modello lineare con umore durante e pratica di attivita’ e tipo abitazione, sesso, eta</li>
+<li>Per ogni sensazione fai modello multinomial con prima e dopo e pratica di attivita’ (e tipo abitazione), sesso, eta</li>
+</ul>
+</div>
+</div>
+<div id="distribuzione-geografica-delle-sensazioni" class="section level1">
+<h1>Distribuzione geografica delle sensazioni</h1>
+<p>Mostra la mappa dell’Italia con le varie sensazioni durante e la differenza tra prima e dopo</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -656,7 +884,6 @@ loaded via a namespace (and not attached):
 [53] ellipsis_0.3.1   generics_0.0.2   vctrs_0.3.0      tools_4.0.0     
 [57] glue_1.4.1       hms_0.5.3        fastmap_1.0.1    yaml_2.2.1      
 [61] colorspace_1.4-1 rvest_0.3.5      knitr_1.28       haven_2.3.0     </code></pre>
-</div>
 </div>
 </div>
 
