@@ -99,7 +99,8 @@ Dato che stiamo guardando alla differenza tra prima e dopo, si avranno valori ne
 ```{r grafico_differenza}
 ggplot(risposte_numeric_long, aes(x = differenze_durante_prima)) + geom_bar() +
   facet_wrap(~Umore) + theme_classic()+ scale_x_continuous(breaks = seq(-4,4,1)) + labs(x = "Differenza in umore: Durante - Prima")+
-  ggtitle("Valori positivi = la sensazione e' aumetata durante la quarantena\nValori negativi = la sensazione e' diminuita durante la quarantena")
+  ggtitle("Valori positivi = la sensazione e' aumetata durante la quarantena\nValori negativi = la sensazione e' diminuita durante la quarantena")+
+  geom_vline(xintercept = 0, linetype="dotted", colour="dark red")
 ```
 
 ```{r grafico_differenza_class}
