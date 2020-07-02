@@ -77,7 +77,7 @@ risposte_var_numeric <- risposte %>%
 ## C'e' stata una diminuzione o aumento in generale dei diversi tipi di umore?
 
 ```{r differenze}
-risposte_var_numeric <- risposte_var_numeric %>%
+risposte_numeric_long <- risposte_var_numeric %>%
   mutate(ansia = ansia_durante - ansia_pre,
          tristezza = tristezza_durante - tristezza_pre,
          stress = stress_durante - stress_pre,
@@ -88,7 +88,7 @@ risposte_var_numeric <- risposte_var_numeric %>%
          soddisfazione = soddisfazione_durante - soddisfazione_pre) %>%
   pivot_longer(ansia:soddisfazione, names_to = "Umore", values_to = "differenze_durante_prima") 
 
-risposte_var_numeric <- risposte_var_numeric %>%
+risposte_numeric_long <- risposte_numeric_long %>%
   mutate(classe_umore = ifelse(Umore %in% c("felicita", "entusiasmo",
                                                "calma", "soddisfazione"), "Umori positivi","Umori negativi"))
 ```
@@ -97,13 +97,13 @@ risposte_var_numeric <- risposte_var_numeric %>%
 Dato che stiamo guardando alla differenza tra prima e dopo, si avranno valori negativi se **prima** della quarantena i partecipanti hanno messo valori piu' alti rispetto al **durante** per certi aspetti umorali e viceversa, valori positivi se **durante** e' maggiore di **prima**.
 
 ```{r grafico_differenza}
-ggplot(risposte_var_numeric, aes(x = differenze_durante_prima)) + geom_bar() +
+ggplot(risposte_numeric_long, aes(x = differenze_durante_prima)) + geom_bar() +
   facet_wrap(~Umore) + theme_classic()+ scale_x_continuous(breaks = seq(-4,4,1)) + labs(x = "Differenza in umore: Durante - Prima")+
   ggtitle("Valori positivi = la sensazione e' aumetata durante la quarantena\nValori negativi = la sensazione e' diminuita durante la quarantena")
 ```
 
 ```{r grafico_differenza_class}
-ggplot(risposte_var_numeric, aes(x = differenze_durante_prima, fill = Umore)) + geom_bar() +
+ggplot(risposte_numeric_long, aes(x = differenze_durante_prima, fill = Umore)) + geom_bar() +
   facet_wrap(~classe_umore) + theme_classic() + 
   scale_x_continuous(breaks = seq(-4,4,1)) + labs(x = "Differenza in umore: Durante - Prima")+
   ggtitle("Valori positivi = la sensazione e' aumetata durante la quarantena\nValori negativi = la sensazione e' diminuita durante la quarantena")
@@ -115,30 +115,178 @@ ggplot(risposte_var_numeric, aes(x = differenze_durante_prima, fill = Umore)) + 
 In particolare dall'attivita' fisica. Nei grafici sotto, invece che mostrare i numeri totali delle persone mostro la proporzione dei livelli dei gruppi (diversi colori) nelle varie barre. 
 
 ```{r umore_pratica}
-ggplot(risposte_var_numeric, aes(x = differenze_durante_prima, fill = pratica)) + geom_bar(position = "fill") +
+ggplot(risposte_numeric_long, aes(x = differenze_durante_prima, fill = pratica)) + geom_bar(position = "fill") +
   facet_wrap(~Umore) + theme_classic()+ scale_x_continuous(breaks = seq(-4,4,1)) + labs(x = "Differenza in umore: Durante - Prima")+
   ggtitle("Valori positivi = la sensazione e' aumetata durante la quarantena\nValori negativi = la sensazione e' diminuita durante la quarantena")
 ```
 
 ```{r umore_pratica_fill}
-ggplot(risposte_var_numeric, aes(x = differenze_durante_prima, fill = pratica_durante)) + geom_bar(position = "fill") +
+ggplot(risposte_numeric_long, aes(x = differenze_durante_prima, fill = pratica_durante)) + geom_bar(position = "fill") +
   facet_wrap(~Umore) + theme_classic()+ scale_x_continuous(breaks = seq(-4,4,1)) + labs(x = "Differenza in umore: Durante - Prima")+
   ggtitle("Valori positivi = la sensazione e' aumetata durante la quarantena\nValori negativi = la sensazione e' diminuita durante la quarantena")
 ```
 
 ```{r umore_pratica_01}
-ggplot(risposte_var_numeric, aes(x = differenze_durante_prima, fill = pratica_durante)) + geom_bar() +
+ggplot(risposte_numeric_long, aes(x = differenze_durante_prima, fill = pratica_durante)) + geom_bar() +
   facet_wrap(~Umore) + theme_classic()+ scale_x_continuous(breaks = seq(-4,4,1)) + labs(x = "Differenza in umore: Durante - Prima")+
   ggtitle("Valori positivi = la sensazione e' aumetata durante la quarantena\nValori negativi = la sensazione e' diminuita durante la quarantena")
 ```
 
 ## Modelli 
 
+```{r mulitin-models}
+library(nnet)
+
+risposte_numeric <- risposte_var_numeric %>%
+  mutate(ansia = ansia_durante - ansia_pre,
+         tristezza = tristezza_durante - tristezza_pre,
+         stress = stress_durante - stress_pre,
+         rabbia = rabbia_durante - rabbia_pre,
+         felicita = felicita_durante - felicita_pre,
+         entusiasmo = entusiasmo_durante - entusiasmo_pre,
+         calma = calma_durante - calma_pre,
+         soddisfazione = soddisfazione_durante - soddisfazione_pre)
+```
+
+
 - Per ogni sensazione fai modello lineare con umore durante e pratica di attivita' e tipo abitazione, sesso, eta
 - Per ogni sensazione fai modello multinomial con prima e dopo e pratica di attivita' (e tipo abitazione), sesso, eta
 
-```{r modelli-univariati}
 
+1. Relevel di tutti gli umori mettendo la classe `Mai` come baseline
+
+```{r relevel-umori}
+risposte <- risposte %>%
+  mutate_at(.vars = c(var_pre, var_durante), 
+            .funs = funs(factor(. , levels = c("Mai", "Raramente", "Ogni tanto", "Spesso", "Ogni giorno"))))
+
+risposte_long <- risposte %>%
+  pivot_longer(ansia_pre:soddisfazione_durante, names_to = "umore", values_to = "livello") %>%
+  mutate(classe_umore = ifelse(umore %in% c("felicita_durante", "entusiasmo_durante",
+                                               "calma_durante", "soddisfazione_durante"), "Umori positivi (Durante)","Umori negativi (Durante)"))
+```
+
+2. Fai un modello per ogni umore e attivita' praticata durante aggiustando per sesso ed eta
+  - Estrai: coefficienti e 95CI per il RR per i coefficienti della pratica durante
+  
+  
+```{r function-extract-confint}
+confint_and_est <- function(fit){
+  bind_cols(RR = exp(coef(fit))[,"ex_durante_si_mpSi"], 
+            t(confint(fit)[2,,]),
+            livello =  rownames(t(confint(fit)[2,,]))) %>%
+    mutate(low.conf = exp(`2.5 %`), high.conf = exp(`97.5 %`)) %>%
+    select(-`2.5 %`, -`97.5 %`)
+}
+```
+
+### Modello con tutti i dati
+  
+```{r modello-nested}
+modello <- risposte_long %>%
+  filter(umore %in% var_durante) %>%
+  dplyr::select(livello, ex_durante_si_mp, Sesso, eta, umore) %>%
+  nest(-umore) %>%
+  mutate(fit = purrr::map(data, ~ multinom(livello ~ ex_durante_si_mp + Sesso + eta, data = .))) %>%
+  mutate(results_fit = purrr::map(fit, function(f) confint_and_est(f))) %>%
+  mutate(z_score = purrr::map(fit, function(x) summary(x)$coefficients/summary(x)$standard.errors)) %>%
+  mutate(pval = purrr::map(z_score, function(z) (1 - pnorm(abs(z), 0, 1)) * 2)) 
+
+espandi_modelli <- modello %>%
+  unnest(results_fit, .drop=TRUE) %>%
+  mutate(livello = factor(livello, levels = c("Raramente", "Ogni tanto", "Spesso", "Ogni giorno")))
+```
+  
+3. Plotta tutti i RR per tutti gli umori
+
+```{r ansia-durante-attivita}
+ggplot(espandi_modelli) +
+  geom_point(aes(x=livello, y = RR)) +
+  geom_line(aes(x=livello, y = RR, group = umore), colour = "dark red", linetype="dotted") +
+  geom_errorbar(aes(x=livello, y = RR, ymin=low.conf, ymax=high.conf), width=0.2, size=0.6) +
+  theme_bw() +
+  facet_wrap(~umore) +
+  geom_hline(yintercept = 1, linetype = "dotted")
+```
+
+
+### Combine positive/negative feelings
+
+```{r combine-pos-neg}
+modello <- risposte_long %>%
+  filter(umore %in% var_durante) %>%
+  dplyr::select(livello, ex_durante_si_mp, Sesso, eta, classe_umore) %>%
+  nest(-classe_umore) %>%
+  mutate(fit = purrr::map(data, ~ multinom(livello ~ ex_durante_si_mp + Sesso + eta, data = .))) %>%
+  mutate(results_fit = purrr::map(fit, function(f) confint_and_est(f))) %>%
+  mutate(z_score = purrr::map(fit, function(x) summary(x)$coefficients/summary(x)$standard.errors)) %>%
+  mutate(pval = purrr::map(z_score, function(z) (1 - pnorm(abs(z), 0, 1)) * 2)) 
+
+espandi_modelli <- modello %>%
+  unnest(results_fit, .drop=TRUE) %>%
+  mutate(livello = factor(livello, levels = c("Raramente", "Ogni tanto", "Spesso", "Ogni giorno")))
+```
+
+```{r combine-pos-neg-plot}
+ggplot(espandi_modelli) +
+  geom_point(aes(x=livello, y = RR)) +
+  geom_line(aes(x=livello, y = RR, group = classe_umore), colour = "dark red", linetype="dotted") +
+  geom_errorbar(aes(x=livello, y = RR, ymin=low.conf, ymax=high.conf), width=0.2, size=0.6) +
+  theme_bw() +
+  facet_wrap(~classe_umore) +
+  geom_hline(yintercept = 1, linetype = "dotted")
+```
+
+I LogOddsRatio per ogni livello sono calcolati con rispetto a chi pratica attivita' sportiva durante la quarantena o chi non pratica. 
+
+### Modello con solo quelli che prima non praticavano
+
+```{r modello-prina-no-attivita}
+modello <- risposte_long %>%
+  filter(umore %in% var_durante & ex_pre_si_no == "No") %>%
+  dplyr::select(livello, ex_durante_si_mp, Sesso, eta, classe_umore) %>%
+  nest(-classe_umore) %>%
+  mutate(fit = purrr::map(data, ~ multinom(livello ~ ex_durante_si_mp + Sesso + eta, data = .))) %>%
+  mutate(results_fit = purrr::map(fit, function(f) confint_and_est(f))) %>%
+  mutate(z_score = purrr::map(fit, function(x) summary(x)$coefficients/summary(x)$standard.errors)) %>%
+  mutate(pval = purrr::map(z_score, function(z) (1 - pnorm(abs(z), 0, 1)) * 2)) 
+
+espandi_modelli <- modello %>%
+  unnest(results_fit, .drop=TRUE) %>%
+  mutate(livello = factor(livello, levels = c("Raramente", "Ogni tanto", "Spesso", "Ogni giorno")))
+
+ggplot(espandi_modelli) +
+  geom_point(aes(x=livello, y = RR)) +
+  geom_line(aes(x=livello, y = RR, group = classe_umore), colour = "dark red", linetype="dotted") +
+  geom_errorbar(aes(x=livello, y = RR, ymin=low.conf, ymax=high.conf), width=0.2, size=0.6) +
+  theme_bw() +
+  facet_wrap(~classe_umore) +
+  geom_hline(yintercept = 1, linetype = "dotted")
+```
+
+### Modello con solo quelli che prima praticavano
+
+```{r modello-prina-si-attivita}
+modello <- risposte_long %>%
+  filter(umore %in% var_durante & ex_pre_si_no == "Si") %>%
+  dplyr::select(livello, ex_durante_si_mp, Sesso, eta, classe_umore) %>%
+  nest(-classe_umore) %>%
+  mutate(fit = purrr::map(data, ~ multinom(livello ~ ex_durante_si_mp + Sesso + eta, data = .))) %>%
+  mutate(results_fit = purrr::map(fit, function(f) confint_and_est(f))) %>%
+  mutate(z_score = purrr::map(fit, function(x) summary(x)$coefficients/summary(x)$standard.errors)) %>%
+  mutate(pval = purrr::map(z_score, function(z) (1 - pnorm(abs(z), 0, 1)) * 2)) 
+
+espandi_modelli <- modello %>%
+  unnest(results_fit, .drop=TRUE) %>%
+  mutate(livello = factor(livello, levels = c("Raramente", "Ogni tanto", "Spesso", "Ogni giorno")))
+
+ggplot(espandi_modelli) +
+  geom_point(aes(x=livello, y = RR)) +
+  geom_line(aes(x=livello, y = RR, group = classe_umore), colour = "dark red", linetype="dotted") +
+  geom_errorbar(aes(x=livello, y = RR, ymin=low.conf, ymax=high.conf), width=0.2, size=0.6) +
+  theme_bw() +
+  facet_wrap(~classe_umore) +
+  geom_hline(yintercept = 1, linetype = "dotted")
 ```
 
 
@@ -163,7 +311,7 @@ province <- map_data("italy")
 
 ## In generale umori positivi vs umori negativi
 
-```{r fig.height=12, fig.width=12}
+```{r plot-geo, fig.height=12, fig.width=12}
 risposte_by_city <- risposte %>%
   left_join(cities, by = c("comune" = "paese_residenza")) %>%
   group_by(comune, lat, long) %>%
@@ -173,13 +321,13 @@ mybreaks <- round(seq(
   min(risposte_by_city$numero_risposte),
   max(risposte_by_city$numero_risposte), length.out = 5))
 
-risposte_var_numeric <- risposte_var_numeric %>%
+risposte_numeric_long <- risposte_numeric_long %>%
   left_join(cities, by = c("comune" = "paese_residenza")) %>%
   left_join(risposte_by_city)
 
 ggplot() +
   geom_polygon(data = italy, aes(x= long, y = lat, group = group), fill="grey", alpha=0.3) +
-  geom_point(data=risposte_var_numeric, aes(x= long, y= lat, 
+  geom_point(data=risposte_numeric_long, aes(x= long, y= lat, 
             size = numero_risposte, colour=differenze_durante_prima), 
             shape=20, stroke=FALSE) +
   scale_size_continuous(name="Numero risposte", range=c(1,12), breaks = mybreaks) +
@@ -202,7 +350,7 @@ ggplot() +
 
 
 ```{r barplots-classe-umore, fig.height=10, fig.width=10}
-risposte_umore <- risposte_var_numeric %>%
+risposte_umore <- risposte_numeric_long %>%
   group_by(classe_umore, comune) %>%
   summarise(media = mean(differenze_durante_prima)) %>%
   mutate(comune = fct_reorder(comune, media))
@@ -220,9 +368,8 @@ ggplot(risposte_umore, aes(x = comune, y = media, fill = media)) +
 
 ## Umori singoli uno per uno
 
-
 ```{r barplots-umori-singoli, fig.height=10, fig.width=10}
-risposte_umore <- risposte_var_numeric %>%
+risposte_umore <- risposte_numeric_long %>%
   group_by(Umore, regione) %>%
   summarise(media = mean(differenze_durante_prima)) %>%
   mutate(comune = fct_reorder(regione, media),
