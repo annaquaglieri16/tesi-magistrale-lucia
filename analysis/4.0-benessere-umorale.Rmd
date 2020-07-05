@@ -179,6 +179,15 @@ confint_and_est <- function(fit){
     mutate(low.conf = exp(`2.5 %`), high.conf = exp(`97.5 %`)) %>%
     select(-`2.5 %`, -`97.5 %`)
 }
+
+confint_and_est_eta <- function(fit){
+  bind_cols(RR = exp(coef(fit))[,"ex_durante_si_mpSi"], 
+            t(confint(fit)[2,,]),
+            livello =  rownames(t(confint(fit)[2,,]))) %>%
+    mutate(low.conf = exp(`2.5 %`), high.conf = exp(`97.5 %`)) %>%
+    select(-`2.5 %`, -`97.5 %`)
+}
+
 ```
 
 ### Modello con tutti i dati
@@ -287,6 +296,107 @@ ggplot(espandi_modelli) +
   geom_errorbar(aes(x=livello, y = RR, ymin=low.conf, ymax=high.conf), width=0.2, size=0.6) +
   theme_bw() +
   facet_wrap(~classe_umore) +
+  geom_hline(yintercept = 1, linetype = "dotted")
+```
+
+
+### Modello influenza umore da sesso e eta
+
+```{r modello-eta}
+confint_and_est_eta <- function(fit){
+  confint_Eta36_55 = data.frame(t(confint(fit)[3,,]))
+  colnames(confint_Eta36_55) <- c("Eta36_55.low_conf", "Eta36_55.high_conf")
+  confint_Eta36_55 <- confint_Eta36_55 %>%
+    mutate(Eta36_55.low_conf = exp(Eta36_55.low_conf), Eta36_55.high_conf = exp(Eta36_55.high_conf))
+    
+  
+  confint_Oltre_55 = data.frame(t(confint(fit)[4,,]))
+  colnames(confint_Oltre_55) <- c("EtaOltre_55.low_conf", "EtaOltre_55.high_conf")
+  confint_Oltre_55 <- confint_Oltre_55 %>%
+    mutate(EtaOltre_55.low_conf = exp(EtaOltre_55.low_conf), 
+           EtaOltre_55.high_conf = exp(EtaOltre_55.high_conf))
+    
+  
+  bind_cols(RR_eta36_55 = exp(coef(fit))[,"etaDai 36 ai 55 anni"],
+            RR_Oltre_55 = exp(coef(fit))[,"etaOltre i 55 anni"],
+            livello = rownames(t(confint(fit)[4,,])),
+            confint_Eta36_55,confint_Oltre_55) 
+}
+
+modello <- risposte_long %>%
+  filter(umore %in% var_durante & ex_pre_si_no == "Si") %>%
+  dplyr::select(livello, ex_durante_si_mp, Sesso, eta, classe_umore) %>%
+  nest(-classe_umore) %>%
+  mutate(fit = purrr::map(data, ~ multinom(livello ~ Sesso + eta, data = .))) %>%
+  mutate(results_fit = purrr::map(fit, function(f) confint_and_est_eta(f))) %>%
+  mutate(z_score = purrr::map(fit, function(x) summary(x)$coefficients/summary(x)$standard.errors)) %>%
+  mutate(pval = purrr::map(z_score, function(z) (1 - pnorm(abs(z), 0, 1)) * 2)) 
+
+espandi_low_conf <- modello %>%
+  unnest(results_fit, .drop=TRUE) %>%
+  mutate(livello = factor(livello, levels = c("Raramente", "Ogni tanto", "Spesso", "Ogni giorno"))) %>%
+  gather(key = classe_eta, value = low.conf, Eta36_55.low_conf, EtaOltre_55.low_conf) %>%
+  dplyr::select(classe_umore, livello, classe_eta, low.conf) %>%
+  mutate(classe_eta = str_remove(classe_eta, ".low_conf"))
+
+espandi_high_conf <- modello %>%
+  unnest(results_fit, .drop=TRUE) %>%
+  mutate(livello = factor(livello, levels = c("Raramente", "Ogni tanto", "Spesso", "Ogni giorno"))) %>%
+  gather(key = classe_eta, value = high.conf, Eta36_55.high_conf, EtaOltre_55.high_conf) %>%
+  dplyr::select(classe_umore, livello, classe_eta, high.conf) %>%
+  mutate(classe_eta = str_remove(classe_eta, ".high_conf"))
+
+espandi_RR <- modello %>%
+  unnest(results_fit, .drop=TRUE) %>%
+  mutate(livello = factor(livello, levels = c("Raramente", "Ogni tanto", "Spesso", "Ogni giorno"))) %>%
+  gather(key = classe_eta, value = RR, RR_eta36_55, RR_Oltre_55) %>%
+  dplyr::select(classe_umore, livello, classe_eta, RR) %>%
+  mutate(classe_eta = case_when(classe_eta %in% "RR_eta36_55" ~ "Eta36_55",
+                                classe_eta %in% "RR_Oltre_55" ~ "EtaOltre_55"))
+  
+espandi_modelli <- espandi_low_conf %>%
+  left_join(espandi_high_conf) %>%
+  left_join(espandi_RR)  
+
+ggplot(espandi_modelli, aes(x = livello, y = RR)) +
+  geom_pointrange(aes(ymin = low.conf, ymax = high.conf, colour = classe_eta), 
+                    position=position_jitter(width=0.5)) +
+  facet_wrap(~ classe_umore)+
+  theme_bw() +
+  geom_hline(yintercept = 1, linetype = "dotted")
+```
+
+
+```{r modello-sesso}
+confint_and_est_sesso <- function(fit){
+  confint_sesso = data.frame(t(confint(fit)[2,,]))
+  colnames(confint_sesso) <- c("SessoMaschio_low.conf", "SessoMaschio_high.conf")
+  confint_sesso <- confint_sesso %>%
+    mutate(SessoMaschio_low.conf = exp(SessoMaschio_low.conf),
+           SessoMaschio_high.conf = exp(SessoMaschio_high.conf))
+  
+  bind_cols(RR = exp(coef(fit))[,"SessoMaschio"],
+            livello = rownames(t(confint(fit)[2,,])),
+            confint_sesso) 
+}
+
+modello <- risposte_long %>%
+  filter(umore %in% var_durante & ex_pre_si_no == "Si") %>%
+  dplyr::select(livello, ex_durante_si_mp, Sesso, eta, classe_umore) %>%
+  nest(-classe_umore) %>%
+  mutate(fit = purrr::map(data, ~ multinom(livello ~ Sesso + eta, data = .))) %>%
+  mutate(results_fit = purrr::map(fit, function(f) confint_and_est_sesso(f))) %>%
+  mutate(z_score = purrr::map(fit, function(x) summary(x)$coefficients/summary(x)$standard.errors)) %>%
+  mutate(pval = purrr::map(z_score, function(z) (1 - pnorm(abs(z), 0, 1)) * 2)) 
+
+espandi_modelli <- modello %>%
+  unnest(results_fit, .drop=TRUE) %>%
+  mutate(livello = factor(livello, levels = c("Raramente", "Ogni tanto", "Spesso", "Ogni giorno"))) 
+
+ggplot(espandi_modelli, aes(x = livello, y = RR)) +
+  geom_pointrange(aes(ymin = SessoMaschio_low.conf, ymax = SessoMaschio_high.conf)) +
+  facet_wrap(~ classe_umore)+
+  theme_bw() +
   geom_hline(yintercept = 1, linetype = "dotted")
 ```
 
