@@ -244,7 +244,8 @@ ggplot(espandi_modelli) +
   geom_errorbar(aes(x=livello, y = RR, ymin=low.conf, ymax=high.conf), width=0.2, size=0.6) +
   theme_bw() +
   facet_wrap(~classe_umore) +
-  geom_hline(yintercept = 1, linetype = "dotted")
+  geom_hline(yintercept = 1, linetype = "dotted")+
+  labs(y = "logOR", x = "Frequenza percepita")
 ```
 
 I LogOddsRatio per ogni livello sono calcolati con rispetto a chi pratica attivita' sportiva durante la quarantena o chi non pratica. 
@@ -271,7 +272,8 @@ ggplot(espandi_modelli) +
   geom_errorbar(aes(x=livello, y = RR, ymin=low.conf, ymax=high.conf), width=0.2, size=0.6) +
   theme_bw() +
   facet_wrap(~classe_umore) +
-  geom_hline(yintercept = 1, linetype = "dotted")
+  geom_hline(yintercept = 1, linetype = "dotted") +
+  labs(y = "logOR", x = "Frequenza percepita")
 ```
 
 ### Modello con solo quelli che prima praticavano
@@ -296,7 +298,8 @@ ggplot(espandi_modelli) +
   geom_errorbar(aes(x=livello, y = RR, ymin=low.conf, ymax=high.conf), width=0.2, size=0.6) +
   theme_bw() +
   facet_wrap(~classe_umore) +
-  geom_hline(yintercept = 1, linetype = "dotted")
+  geom_hline(yintercept = 1, linetype = "dotted")+
+  labs(y = "logOR", x = "Frequenza percepita")
 ```
 
 
